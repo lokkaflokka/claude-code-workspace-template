@@ -9,8 +9,8 @@
 - [x] "Relationship to Source System" section
 - [x] `/new-project` and `/new-technique` commands
 - [x] Dogfood in source system (ongoing)
-- [ ] GitHub repo created
-- [ ] Initial commit with v0.1.0 tag
+- [x] GitHub repo created
+- [x] Tagged v0.1.2
 - [ ] LinkedIn post drafted and published
 
 ## Post-Distribution
