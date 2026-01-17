@@ -4,10 +4,11 @@
 
 - [x] Core template structure
 - [x] README with philosophy and quick start
-- [x] Example techniques (Session Init, Living KB, Query Routing)
+- [x] Example techniques (Session Init, Living KB, Query Routing, Sub-Project Pattern)
 - [x] Artifact sync model documented
 - [x] "Relationship to Source System" section
-- [ ] Dogfood in source system (ongoing)
+- [x] `/new-project` and `/new-technique` commands
+- [x] Dogfood in source system (ongoing)
 - [ ] GitHub repo created
 - [ ] Initial commit with v0.1.0 tag
 - [ ] LinkedIn post drafted and published

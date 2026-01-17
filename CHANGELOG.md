@@ -2,6 +2,13 @@
 
 All notable changes to this template.
 
+## [0.1.2] - 2026-01-17
+
+### Added
+- **`/new-project` command** — Automates creation of projects and sub-projects with proper structure and registration
+- **`/new-technique` command** — Automates documenting techniques and evaluating them across projects
+- **Sub-Project Pattern** in TECHNIQUES.md — Pattern for nested finite-scope work with lifecycle management and alert propagation
+
 ## [0.1.1] - 2026-01-17
 
 ### Added

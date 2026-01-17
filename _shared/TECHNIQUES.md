@@ -167,4 +167,75 @@ A lookup table in CLAUDE.md that maps user intents to specific files or actions,
 
 ---
 
+### Sub-Project Pattern
+
+**Type:** Project
+**Origin:** Common pattern for nested work
+**Added:** YYYY-MM-DD
+
+#### What it is
+A pattern for managing finite-scope work that lives within a parent project but has its own state tracking, lifecycle, and alert propagation.
+
+#### Why it works
+- **Right-sized structure**: Not every piece of work needs a full project; some work is bounded and will complete
+- **Alert visibility**: Time-sensitive sub-project items surface at parent level via automatic scan
+- **Clean lifecycle**: Sub-projects transition through `active` → `dormant` → `completed`
+- **Working memory integration**: Critical sub-projects can bubble up to workspace level via manual pointer
+
+#### Sub-project Structure
+
+```
+parent-project/
+├── CLAUDE.md
+├── CURRENT_STATE.md
+└── sub-project-name/
+    ├── CLAUDE.md           # _context.type + status
+    ├── CURRENT_STATE.md    # Phase, blocking items, pending actions
+    └── [domain-specific files]
+```
+
+**Required in sub-project CLAUDE.md:**
+```yaml
+_context:
+  type: sub-project
+  status: active            # active | dormant | completed
+  parent: ../
+  created: YYYY-MM-DD
+  expected_completion: YYYY-QN
+```
+
+#### Lifecycle
+
+| Status | Meaning | Surfaced at parent? |
+|--------|---------|---------------------|
+| `active` | Work in progress | Yes (via scan) |
+| `dormant` | Stable, occasional reference | No |
+| `completed` | Done, archive candidate | No |
+
+#### Alert Propagation
+
+**Parent project session init should scan for active sub-projects:**
+```markdown
+N. **Check sub-projects** — Scan subdirectories for CURRENT_STATE.md:
+   - If sub-project has `_context.status: active`, read and surface alerts
+   - If `dormant` or `completed`, skip
+```
+
+**For workspace-level visibility**, add a working memory pointer to `_shared/CURRENT_STATE.md`:
+```markdown
+| **Active sub-project:** parent/sub-project | YYYY-MM-DD | Brief context |
+```
+
+#### When to use
+- Time-boxed initiatives (transitions, migrations, projects with end dates)
+- Work clearly scoped to one domain (lives under relevant parent)
+- Situations where you want tracking but not a full project
+
+#### When NOT to use
+- Ongoing domains with indefinite lifespan → use a project
+- Cross-cutting work spanning multiple projects → use `_shared/` or separate project
+- Quick one-off tasks → just do them, no structure needed
+
+---
+
 *Add new techniques above this line*
