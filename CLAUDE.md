@@ -12,6 +12,7 @@ This is the workspace root — a meta/organizational layer that spans all projec
    - Pending technique evaluations (documented but not yet evaluated)
    - Registry drift (projects exist that aren't in PROJECTS.md, or vice versa)
    - Stale state (CURRENT_STATE hasn't been updated recently)
+   - Working memory items (unexpired notes; prompt to clear expired ones)
    - Last session context (what was worked on, where we left off)
 
 3. **Run consistency check if needed** — Verify `_shared/PROJECTS.md` matches reality

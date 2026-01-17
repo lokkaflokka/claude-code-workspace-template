@@ -30,6 +30,18 @@ Patch: YYYY-MM-DD.1
 
 ---
 
+## Working Memory (expires)
+
+Short-term notes that should be surfaced then cleared.
+
+| Note | Expires | Context |
+|------|---------|---------|
+| — | — | — |
+
+*On session start: surface unexpired items, prompt to clear expired ones.*
+
+---
+
 ## Last Session
 
 **Date:** YYYY-MM-DD

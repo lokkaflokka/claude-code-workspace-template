@@ -29,9 +29,10 @@ This directory manages learnings, techniques, and patterns that span multiple pr
 **On every session at `_shared/` level:**
 
 1. **Read `CURRENT_STATE.md`** — The meta-level dashboard
-2. **Surface ALERTS** — Pending evaluations, registry drift, stale data
-3. **Show last session context** — What was worked on, where we left off
-4. **Ask how to help** — Or suggest actions based on current state
+2. **Surface ALERTS** — Pending evaluations, registry drift, stale data, working memory
+3. **Check Working Memory** — Surface unexpired items; prompt to clear expired ones
+4. **Show last session context** — What was worked on, where we left off
+5. **Ask how to help** — Or suggest actions based on current state
 
 **Example:**
 ```
