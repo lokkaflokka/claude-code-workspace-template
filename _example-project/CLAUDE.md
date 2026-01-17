@@ -26,23 +26,30 @@ _context:
 
 **On every session in this project:**
 
-1. **Read `CURRENT_STATE.md`** (if it exists) — Check for alerts and context
-2. **Surface any time-sensitive items** — Deadlines, pending actions, stale data
-3. **Show last session context** — What was worked on, where we left off
-4. **Ask how to help** — Or suggest relevant actions
+1. **Read `CURRENT_STATE.md`** (if it exists) — Check for project-level alerts and context
+2. **Read `../_shared/CURRENT_STATE.md`** — Check for system-wide working memory and alerts
+3. **Surface items from both levels:**
+   - Project-level: deadlines, pending actions, stale data, working memory
+   - System-level: working memory items that apply everywhere
+4. **Show last session context** — What was worked on, where we left off
+5. **Ask how to help** — Or suggest relevant actions
+
+**Working Memory Scoping:**
+- Items in `_shared/CURRENT_STATE.md` → surface in ALL sessions (system-wide)
+- Items in this project's `CURRENT_STATE.md` → surface only here (project-specific)
 
 **Example session start:**
 ```
-I've reviewed the project state:
+I've reviewed the project and system state:
 
-- [ALERT if any]
-- [PENDING ACTIONS if any]
+- [PROJECT ALERT if any]
+- [SYSTEM WORKING MEMORY if any]
 - Last session: [what was worked on]
 
 What would you like to focus on?
 ```
 
-*If this project doesn't need state tracking, you can remove this section and CURRENT_STATE.md.*
+*If this project doesn't need state tracking, you can remove CURRENT_STATE.md, but still check _shared for system-wide items.*
 
 ---
 
