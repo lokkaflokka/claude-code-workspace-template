@@ -7,6 +7,7 @@ All notable changes to this template.
 ### Added
 - **Working Memory** section in CURRENT_STATE.md templates — short-term notes with expiration dates
 - Session initialization protocols now surface unexpired working memory items and prompt to clear expired ones
+- **Cross-level working memory** — project sessions now read both project-level AND system-level state, so system-wide items surface everywhere
 
 ## [0.1.0] - 2026-01-17
 
