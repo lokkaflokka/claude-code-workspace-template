@@ -2,6 +2,13 @@
 
 All notable changes to this template.
 
+## [0.1.3] - 2026-01-19
+
+### Added
+- **"Your First Session" guide** in README — step-by-step instructions for bootstrapping a working system from the template
+- **"What It Looks Like After a Few Weeks"** — realistic examples showing populated CURRENT_STATE.md and Common Mistakes sections
+- **"The Bootstrapping Mindset"** — sets expectations for how value compounds over time (Week 1 = setup, Week 2 = remembering, Week 3+ = compounding)
+
 ## [0.1.2] - 2026-01-17
 
 ### Added

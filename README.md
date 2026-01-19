@@ -35,6 +35,110 @@ If you just need Claude for quick one-off tasks, this is overkill. If you're bui
 4. Customize each project's `CLAUDE.md` with project-specific context
 5. Start a session at the root — Claude will read `CURRENT_STATE.md` and orient itself
 
+## Your First Session
+
+The template is scaffolding. The value comes from using it. Here's how to bootstrap a working system:
+
+### Session 1: Set Up Your First Project
+
+1. **Start Claude Code at the workspace root**
+
+   Claude will read `CLAUDE.md` and `_shared/CURRENT_STATE.md`. Since everything is placeholder text, that's fine — you're about to change that.
+
+2. **Tell Claude about a real project you want to track**
+
+   Example prompts:
+   - "I want to set up a project for tracking my home renovation"
+   - "I have a side project called X — help me create a knowledge base for it"
+   - "I'm learning Spanish — let's set up a project to track resources and progress"
+
+3. **Let Claude help you customize the project CLAUDE.md**
+
+   Claude will rename `_example-project/`, update the Overview, Key Files, and Query Routing sections based on what you describe.
+
+4. **Before ending the session, update state**
+
+   Say: "Update CURRENT_STATE.md with what we worked on today."
+
+   Claude will fill in the Last Session section with real content. Now you have state.
+
+### Sessions 2-5: Build Momentum
+
+Each session, Claude will read your state and tell you where you left off. As you work:
+
+- **When Claude makes a mistake**, say "Add that to Common Mistakes" — now it won't happen again
+- **When you finish something**, say "Update CURRENT_STATE.md" — now you have continuity
+- **When you discover a useful pattern**, consider documenting it in `TECHNIQUES.md`
+
+By session 5, you'll have:
+- A project with real context Claude remembers
+- A few mistakes Claude won't repeat
+- Session history showing what you've worked on
+- Maybe a technique worth tracking
+
+This is when the system starts feeling different from a blank Claude session.
+
+### What It Looks Like After a Few Weeks
+
+Here's a realistic example of what `_shared/CURRENT_STATE.md` might look like once you've been using the system:
+
+```markdown
+# Meta-Level Current State
+
+As-of date: 2026-02-15
+
+---
+
+## ALERTS (surface on session start)
+
+### Pending Evaluations
+| Priority | Technique | Documented | Status |
+|----------|-----------|------------|--------|
+| 🟡 | "Decision Log Template" | 2026-02-10 | Needs evaluation |
+
+---
+
+## Working Memory (expires)
+
+| Note | Expires | Context |
+|------|---------|---------|
+| Contractor quote expires | 2026-02-20 | Kitchen renovation — need to decide by Friday |
+| Library books due | 2026-02-18 | Spanish learning resources, can renew once |
+
+---
+
+## Last Session
+
+**Date:** 2026-02-15
+**Focus:** Home renovation — comparing contractor quotes
+**Outcome:** Created comparison spreadsheet, identified key questions
+**Left off:** Need to call references for top two contractors
+```
+
+And here's what a project's Common Mistakes section might look like after real use:
+
+```markdown
+## Common Mistakes
+
+### Data Handling
+- **Don't assume prices are current** — Always check the quote date before making comparisons. Quotes typically expire after 30 days. (discovered 2026-01-20: compared a stale quote against fresh ones)
+
+### Recommendations
+- **Don't suggest scheduling without checking the calendar** — Read CURRENT_STATE.md for any blocked dates before proposing timelines. (discovered 2026-02-01: suggested a start date during a planned vacation)
+```
+
+The system gets better because it remembers what went wrong.
+
+### The Bootstrapping Mindset
+
+**Week 1:** You're teaching Claude about your projects. Sessions feel like setup.
+
+**Week 2:** Claude starts remembering context. You spend less time explaining.
+
+**Week 3+:** Claude surfaces things you forgot, avoids mistakes it made before, and connects patterns across projects.
+
+The structure is immediate. The value compounds.
+
 ## Structure
 
 ```
