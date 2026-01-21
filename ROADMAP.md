@@ -21,12 +21,19 @@
 
 ## Future Considerations
 
-| Item | Trigger |
-|------|---------|
-| Video walkthrough | 5+ people ask for one |
-| Minimal vs full setup as branches | Confusion about where to start |
-| Additional technique examples | Clear demand for specific patterns |
-| Integration guides (Obsidian, VSCode, etc.) | User requests |
+| Item | Trigger | Source |
+|------|---------|--------|
+| Video walkthrough | 5+ people ask for one | Original |
+| Minimal vs full setup as branches | Confusion about where to start | Original |
+| Additional technique examples | Clear demand for specific patterns | Original |
+| Integration guides (Obsidian, VSCode, etc.) | User requests | Original |
+| **MCP Development Guidance section** | When adding MCP-related content | Eval backfill 2026-01-20 |
+| — DIY Over Framework Lock-in principle | (part of MCP guidance) | Technique: simple agents > frameworks |
+| — Defensive coding (Anxiety.md) pattern | (part of MCP guidance) | Technique: security-sensitive code review |
+| — Fallback Instructions pattern | (part of MCP guidance) | Technique: dependency failure handling |
+| — Preflight Sanity Check pattern | (part of MCP guidance) | Technique: config verification before work |
+| **Autoskill example/guidance** | Interest in self-improving skills | Eval backfill 2026-01-20 |
+| **Interactive Feedback Loop pattern** | Interest in learning capture | Eval backfill 2026-01-20 |
 
 ## Design Decisions
 
