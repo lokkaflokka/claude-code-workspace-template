@@ -150,13 +150,20 @@ your-workspace/
 │   ├── TECHNIQUES.md            # Pattern catalog
 │   ├── EVALUATION_LOG.md        # Technique evaluation tracking
 │   └── PROJECTS.md              # Project registry
-├── _example-project/
+├── _example-project/            # Empty scaffolding (start here)
 │   ├── CLAUDE.md                # Project-level context
 │   └── CURRENT_STATE.md         # Project-level state (optional)
+├── _example-project-day7/       # Populated example (see what "lived-in" looks like)
+│   ├── CLAUDE.md                # With real context, mistakes, routing
+│   └── CURRENT_STATE.md         # With deadlines, working memory, history
 └── .claude/
     └── commands/
         └── consistency-check.md # Registry verification command
 ```
+
+**Two examples included:**
+- `_example-project/` — Empty scaffolding to copy and customize
+- `_example-project-day7/` — A "Day 7" snapshot showing what a project looks like after a week of real use (home renovation example with quotes, deadlines, discovered mistakes)
 
 ## Key Concepts
 
@@ -229,11 +236,51 @@ For serious multi-project use:
 | `*/CURRENT_STATE.md` | Add your actual alerts, work streams, state |
 | `_shared/TECHNIQUES.md` | Add techniques you discover (or remove the examples) |
 
-### What NOT to Put Here
+### File Size Guidelines
 
-- **Sensitive data** — This structure is for *context*, not secrets
-- **Large content** — Keep CLAUDE.md files focused; link to detailed docs
-- **Ephemeral information** — State files are for persistent state, not scratch notes
+Keep files focused to avoid "context bloat" — the tax Claude pays reading long files every session.
+
+| File | Target Size | Rationale |
+|------|-------------|-----------|
+| `CURRENT_STATE.md` | ~1 screen (50-80 lines) | Should be scannable at session start |
+| `CLAUDE.md` (per project) | 200-300 lines max | Operational context, not encyclopedia |
+| `TECHNIQUES.md` | Unlimited | Reference doc, read on demand |
+
+**If a file grows too large:** Extract content to linked documents. CLAUDE.md should say "see `playbooks/rebalancing.md`" rather than containing the full playbook.
+
+### Session Closing Ritual
+
+Before ending any session, update state:
+
+```
+"Update CURRENT_STATE.md with what we worked on today."
+```
+
+Make this muscle memory. Consistent state updates are what create continuity. Some users create a keyboard shortcut or snippet for this prompt.
+
+**What to capture:**
+- What you focused on
+- What was accomplished
+- Where to pick up next time
+- Any new working memory items (with expiration dates)
+
+### What NOT to Put Here (Red List)
+
+**Never store:**
+- API keys or credentials
+- Passwords or tokens
+- Personal identifiers (SSN, account numbers)
+- Raw meeting transcripts (summarize instead)
+- Large data files (link to them)
+- Sensitive financial details
+- Private health information
+
+**Store carefully:**
+- Names of people (use roles if possible: "my manager" vs "John Smith")
+- Company-specific details (may limit shareability)
+- Anything you wouldn't want in a git commit
+
+This structure is for *context*, not secrets. If you're unsure, don't include it.
 
 ## The Personal ↔ Distributable Boundary
 
@@ -257,6 +304,11 @@ This template embeds a few beliefs:
 3. **Systems should self-improve** — If you're building a system for learning, apply that learning to the system itself.
 
 4. **Explicit > implicit** — Write down the rules, the mistakes, the patterns. Don't rely on Claude (or yourself) remembering.
+
+5. **Context rot is real** — Claude's output quality degrades as the context window fills up. Long sessions accumulate noise. This is why we use:
+   - **Modular files** — Each file focused, not a dumping ground
+   - **Session boundaries** — Fresh sessions for fresh context
+   - **State files** — Write state externally so new sessions can resume without overhead
 
 ## FAQ
 

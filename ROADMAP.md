@@ -11,6 +11,15 @@
 - [x] Dogfood in source system (ongoing)
 - [x] GitHub repo created
 - [x] Tagged v0.1.2
+
+## v0.1.4 (2026-01-25) — External Review Improvements
+
+- [x] File size guidelines (CURRENT_STATE ~1 screen, CLAUDE.md 200-300 lines)
+- [x] Session closing ritual documentation
+- [x] Red list (what not to store) expanded
+- [x] Context rot awareness in Philosophy
+- [x] Search-first discovery protocol for larger projects
+- [x] Day 7 snapshot example (`_example-project-day7/`)
 - [ ] LinkedIn post drafted and published
 
 ## Post-Distribution

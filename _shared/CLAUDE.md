@@ -88,6 +88,16 @@ When asked to evaluate a technique:
 | `EVALUATION_LOG.md` | Tracking of technique evaluations |
 | `PROJECTS.md` | Registry of all projects |
 
+## Discovery Protocol (for larger projects)
+
+When a project grows beyond ~20 files, add this constraint to reduce token waste:
+
+> **Search first, explore as last resort.** Use search/grep tools to find what you need. Only list directories or read files speculatively if search returns nothing relevant.
+
+This prevents the "list → read → filter → repeat" loop that burns tokens on large codebases.
+
+---
+
 ## Common Mistakes
 
 *Capture errors at the meta-level here so they don't recur.*

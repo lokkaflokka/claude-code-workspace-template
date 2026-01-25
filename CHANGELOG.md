@@ -2,6 +2,19 @@
 
 All notable changes to this template.
 
+## [0.1.4] - 2026-01-25
+
+### Added
+- **File Size Guidelines** — Explicit targets: CURRENT_STATE ~1 screen, CLAUDE.md 200-300 lines max
+- **Session Closing Ritual** — Documented pattern for consistent state updates
+- **Red List expanded** — Explicit list of what NOT to store (credentials, PII, raw transcripts, etc.)
+- **Context Rot awareness** — Added to Philosophy section explaining why modular files and session boundaries matter
+- **Search-First Discovery Protocol** — Added to `_shared/CLAUDE.md` for larger projects to reduce token waste
+- **Day 7 snapshot example** — `_example-project-day7/` showing a populated project after a week of real use (home renovation example with deadlines, working memory, discovered mistakes)
+
+### Changed
+- Structure section now describes both example projects (empty scaffolding vs. lived-in snapshot)
+
 ## [0.1.3] - 2026-01-19
 
 ### Added
