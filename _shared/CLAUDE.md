@@ -181,6 +181,8 @@ Consolidated behavioral rules with active enforcement mechanisms. These replace 
 
 **Reminder chain rule:** When completing a reminder that has remaining follow-up actions, ALWAYS create a successor reminder before marking it done. A completed reminder with dangling TODOs is a dropped ball.
 
+**Reminder freshness rule:** When session work changes state that an open reminder references (version numbers, completed sub-items, new prerequisites), update that reminder's body in the same session. Stale reminder bodies cause future-self to act on wrong context.
+
 ---
 
 ## Common Mistakes
