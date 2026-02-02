@@ -2,6 +2,23 @@
 
 All notable changes to this template.
 
+## [0.1.5] - 2026-02-02
+
+### Added
+- **Core Principles framework** — Enforced behavioral rules replacing passive "Common Mistakes" list. Template structure (principle + enforcement + violations prevented) for users to customize with their own rules.
+- **Compact session init output** — Output format rules: compact lines, no tables, visual priority indicators (🔴/⏳/•), suppress all-clear categories
+- **Completed reminders since last session** — Init protocol now surfaces recently completed reminders and asks for outcomes (state files may need updating)
+- **Date anchoring rule** — Always anchor today's date from environment; never derive day-of-week mentally
+- **Session-end artifact checklist** — Explicit checklist: CURRENT_STATE, vault state files, MCP version bumps
+- **Reminder chain rule** — Completing a reminder with remaining actions → create successor before marking done
+- **Versioning policy** — When/how to bump packages (feat=minor, fix=patch), tag drift awareness in Principle #5
+- **Tag drift check** — New section in `/consistency-check` detecting commits past latest tag, missing tags, version/tag mismatches
+- **Template staleness check** — New section in `/consistency-check` comparing template release dates against source system modifications
+
+### Changed
+- Session init protocol is now mandatory (no exceptions, even for action requests)
+- Init example uses compact format with emoji indicators instead of verbose text
+
 ## [0.1.4] - 2026-01-25
 
 ### Added

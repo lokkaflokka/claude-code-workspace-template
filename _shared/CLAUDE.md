@@ -98,9 +98,94 @@ This prevents the "list → read → filter → repeat" loop that burns tokens o
 
 ---
 
+## Core Principles (Enforced)
+
+Consolidated behavioral rules with active enforcement mechanisms. These replace the "Common Mistakes" list below — mistakes without enforcement are aspirational.
+
+**The meta-rule:** Documentation without enforcement is aspirational. Each principle below has a verification step.
+
+*Customize these principles for your workflow. The structure (principle + enforcement + violations prevented) is the pattern; the specific rules are yours to define.*
+
+---
+
+### 1. Files Are The Work Product
+
+**Principle:** Conversation is ephemeral. Knowledge must be in files to persist.
+
+**Enforcement:** Before declaring anything "complete," answer:
+- What artifacts should exist from this work?
+- Do they exist in files right now?
+- If no: persist before moving on.
+
+**Session-end checklist** (verify before closing out):
+- [ ] `CURRENT_STATE.md` — reflects what was done and where we left off
+- [ ] Vault-level state files — if work touched a specific project
+- [ ] **If MCP package commits were made:** version bump + tag + reference updates per Principle #5
+
+---
+
+### 2. Verify, Don't Assume
+
+**Principle:** Verifiable claims must be verified. Reference explicit sources.
+
+**Enforcement:**
+- State claims (commits, file status): Run the actual command
+- **Dates:** Anchor from the environment `Today's date` field. For long sessions or relative terms ("tomorrow", "next Monday"), run `date` to re-verify. NEVER derive day-of-week mentally.
+- File contents: Read the file, don't assume from memory
+
+---
+
+### 3. Understand Before Acting
+
+**Principle:** Read context before producing artifacts.
+
+**Enforcement:** Before writing any artifact:
+- **Run the Session Initialization Protocol if it hasn't been run yet** — non-negotiable, even if the user's first message is an action request
+- Read the project's CLAUDE.md
+- Check relevant CURRENT_STATE.md files
+
+---
+
+### 4. Apply Before Inventing
+
+**Principle:** Check existing patterns before designing new ones.
+
+**Enforcement:** Before proposing a new pattern:
+- Search TECHNIQUES.md for relevant existing patterns
+- Check existing projects for proven structures
+- Only invent if nothing existing applies
+
+---
+
+### 5. Sync Is Immediate
+
+**Principle:** Related updates happen in the same session.
+
+**Enforcement:** After any project/package change, same-session checklist:
+- [ ] PROJECTS.md registry updated?
+- [ ] Version references match across files?
+- [ ] **Version bump needed?** If feat: or fix: commits → bump package.json (feat = minor, fix = patch), update CHANGELOG, git tag.
+- [ ] **Tag matches package.json?** `git tag v{version}` must exist at HEAD.
+- [ ] Build step run if applicable?
+
+---
+
+### 6. Future Self Can Act Immediately
+
+**Principle:** Time-delayed artifacts must be self-contained and actionable.
+
+**Enforcement:** Every reminder, calendar event, or working memory item must include:
+- What to do (specific action)
+- How to do it (invocation method, not just name)
+- Context needed (costs, deadlines, decision framework)
+
+**Reminder chain rule:** When completing a reminder that has remaining follow-up actions, ALWAYS create a successor reminder before marking it done. A completed reminder with dangling TODOs is a dropped ball.
+
+---
+
 ## Common Mistakes
 
-*Capture errors at the meta-level here so they don't recur.*
+*Legacy section — migrate recurring mistakes into Core Principles above with enforcement mechanisms.*
 
 ### Technique Management
 - **Don't document a technique without evaluating it** — Every technique should have a corresponding EVALUATION_LOG entry

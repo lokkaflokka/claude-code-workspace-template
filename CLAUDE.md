@@ -4,33 +4,39 @@ This is the workspace root — a meta/organizational layer that spans all projec
 
 ## Session Initialization Protocol
 
-**When a session starts at this level, immediately:**
+**MANDATORY on every new session at this level — no exceptions, even if the user's first message is an explicit action request or plan.**
 
-1. **Read `_shared/CURRENT_STATE.md`** — This is the meta-level dashboard
+The user opening with "implement this plan" or "do X" does NOT skip initialization. Run init first, present the summary, THEN proceed to the user's request.
 
-2. **Surface ALERTS** — Proactively tell the user about:
-   - Pending technique evaluations (documented but not yet evaluated)
-   - Registry drift (projects exist that aren't in PROJECTS.md, or vice versa)
-   - Stale state (CURRENT_STATE hasn't been updated recently)
-   - Working memory items (unexpired notes; prompt to clear expired ones)
-   - Last session context (what was worked on, where we left off)
+**Steps (run before any other work):**
 
-3. **Run consistency check if needed** — Verify `_shared/PROJECTS.md` matches reality
-
-4. **Clarify intent if ambiguous** — If the request clearly belongs to one project, ask which project before diving in
-
-5. **Recognize meta-level patterns:**
+1. **Read `_shared/CURRENT_STATE.md`** — Meta-level dashboard
+2. **Check reminders/deadlines** — Whatever reminder system you use (Apple Reminders, Things, etc.):
+   - **Anchor today's date first** from the environment `Today's date` field — all "due in X days" calculations MUST use this. Do not infer or assume the date.
+   - **Completed reminders since last session:** If any reminders completed since the last session, surface them and ask the user for outcomes. These represent actions taken outside the session — state files may need updating.
+3. **Run consistency check** — Registry drift, technique freshness, file sizes
+4. **Clarify if intent seems project-specific** — If the request clearly belongs to one project, ask which before diving in
+5. **Otherwise, recognize meta-level patterns:**
    - "New technique" → Document in `_shared/TECHNIQUES.md`, evaluate, log
    - "Cross-project work" → Identify which projects are involved
    - "New project setup" → Create from `_example-project/` template
 
+**Output format rules:**
+- **Compact lines, no tables** — keep the whole summary scannable
+- **Reminders:** Show open items due within 7 days. 🔴 ≤1 day, ⏳ 2-3 days, bullet for 4-7 days.
+- **Completed since last session:** Surface any recently completed reminders. Ask for outcomes — these are actions taken outside the session that may require state file updates.
+- **Alerts: only surface issues.** If everything is clean, print `⚠️ ALERTS: None`. Don't enumerate "all clear" categories.
+- **Last session:** One line — focus and what was left off.
+
 **Example session start:**
 ```
-I've reviewed the meta-level state. Here's what needs attention:
+📅 REMINDERS (next 7 days):
+  🔴 Tomorrow: Submit expense report
+  ⏳ Feb 4: Review quarterly goals
+  • Feb 7: Team sync prep
 
-- TECHNIQUE: "Evidence-First Scoring" documented 5 days ago, not yet evaluated
-- REGISTRY: All projects accounted for
-- LAST SESSION: Worked on travel automation, left off at booking flow
+⚠️ ALERTS: None
+🔄 Last session (Jan 31): Worked on travel automation. Left off: booking flow.
 
 What would you like to focus on today?
 ```

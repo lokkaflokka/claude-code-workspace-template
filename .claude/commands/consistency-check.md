@@ -20,9 +20,19 @@ Verify that the workspace registry matches reality and flag any drift.
    - Flag techniques documented but never evaluated
    - Flag techniques documented more than 14 days ago without evaluation
 
-4. **State Freshness Check**
+4. **Tag Drift Check** (for MCP packages or versioned artifacts)
+   - For each package: find latest git tag, count commits past it
+   - Flag if commits > 0 past latest tag (version bump needed)
+   - Flag if no tags exist at all (baseline tag needed)
+   - Check that `package.json` version matches latest tag
+
+5. **State Freshness Check**
    - Check `_shared/CURRENT_STATE.md` last updated date
    - Flag if more than 7 days stale
+
+6. **Template Staleness Check** (if using a workspace template)
+   - Compare template's last tag date against source system's last modification dates
+   - Flag if source files (CLAUDE.md, consistency-check, TECHNIQUES.md) are significantly newer than the template's last release
 
 ## Execution Steps
 
@@ -60,6 +70,12 @@ ls -d */ | grep -v "^_" | grep -v "^\."
 - [OK] All techniques have been evaluated
   OR
 - [STALE] "Technique X" documented YYYY-MM-DD, not evaluated
+
+### Tag Drift
+- [OK] my-package: v0.2.0 at HEAD, matches package.json
+  OR
+- [DRIFT] my-package: 5 commits past v0.1.0, package.json=0.1.0 (bump needed)
+- [DRIFT] my-package: no tags (baseline tag needed)
 
 ### State Freshness
 - [OK] CURRENT_STATE.md updated within 7 days
