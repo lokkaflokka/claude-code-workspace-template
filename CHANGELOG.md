@@ -2,6 +2,11 @@
 
 All notable changes to this template.
 
+## [0.1.6] - 2026-02-02
+
+### Added
+- **Reminder freshness rule** — When session work changes state referenced by an open reminder, update that reminder's body in the same session. Prevents stale reminder bodies from causing future-self to act on wrong context.
+
 ## [0.1.5] - 2026-02-02
 
 ### Added
