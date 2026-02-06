@@ -2,6 +2,14 @@
 
 All notable changes to this template.
 
+## [0.1.7] - 2026-02-05
+
+### Added
+- **Defensive Code Generation** technique — Frame Claude as a senior engineer burned by production incidents to induce defensive coding patterns (input validation, error handling, edge case coverage)
+- **Route Around Unreliable Tools** technique — When a tool is partially reliable, partition reliable vs unreliable operations and route the broken ones through alternatives
+- **Search-First Discovery** technique — Promotes the existing Discovery Protocol blurb into a full technique with examples, implementation guidance, and applicability criteria
+- Cross-reference from Discovery Protocol in `_shared/CLAUDE.md` to the full Search-First Discovery technique
+
 ## [0.1.6] - 2026-02-02
 
 ### Added

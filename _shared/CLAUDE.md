@@ -94,7 +94,7 @@ When a project grows beyond ~20 files, add this constraint to reduce token waste
 
 > **Search first, explore as last resort.** Use search/grep tools to find what you need. Only list directories or read files speculatively if search returns nothing relevant.
 
-This prevents the "list → read → filter → repeat" loop that burns tokens on large codebases.
+This prevents the "list → read → filter → repeat" loop that burns tokens on large codebases. See the **Search-First Discovery** technique in `TECHNIQUES.md` for full details, examples, and guidance on when to apply.
 
 ---
 
