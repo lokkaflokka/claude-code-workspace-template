@@ -378,4 +378,207 @@ Common search patterns:
 
 ---
 
+### Preflight Sanity Check
+
+**Type:** Workflow
+**Origin:** Common pattern for config-dependent workflows
+**Added:** YYYY-MM-DD
+
+#### What it is
+Before running a workflow that depends on configuration or external state, perform explicit checks to verify the system will behave as expected. Surface issues before wasted work, not after.
+
+#### Why it works
+- Config drift is invisible — changes may not take effect until restart
+- Silent failures waste entire workflow runs on stale state
+- A 10-second check before a 5-minute workflow saves time net
+- Debugging from "bad output" is harder than debugging from "check failed"
+
+#### The pattern
+
+**Step 0 (Before work):**
+- Were config files recently changed? → May need service restart
+- Are dependent services running and healthy?
+- Use conservative settings initially (don't clear state until confirmed good)
+
+**Step N (After initial output):**
+- Does output match expected behavior?
+- Check for telltale signs of stale config
+- Surface issues before proceeding
+
+#### Example
+```markdown
+### Step 0: Preflight
+
+Before running the data pipeline:
+- Config changed this session → restart the MCP server
+- Using `dry_run: true` to preserve state if issues arise
+- Check: API token valid? `curl -s $API/health`
+
+### Step 3: Sanity Check
+
+Quick check on returned data:
+- Expected categories present? ✓
+- Old filter rules still appearing? → config not applied
+- Record count in expected range? → data source healthy
+```
+
+#### When to use
+- Workflows depending on config files (scoring rules, filters, thresholds)
+- Tools that require service restarts to pick up changes
+- Pipelines where early steps affect later steps (catch errors early)
+
+#### When NOT to use
+- Simple, stateless operations with no config dependencies
+- Interactive work where you'll see issues immediately
+
+---
+
+### Fallback Instructions
+
+**Type:** Workflow
+**Origin:** Common pattern for robust workflows
+**Added:** YYYY-MM-DD
+
+#### What it is
+Every workflow step that depends on an external tool, API, or service should document three things: how to detect it's not working, what to do instead, and what quality/capability is lost in fallback mode.
+
+#### Why it works
+- Workflows can proceed even when components fail
+- Users know they're getting degraded output (transparency)
+- Clear distinction between "missing" and "broken"
+- Non-critical failures don't block the entire workflow
+
+#### The three questions
+
+For each external dependency, document:
+
+1. **Detection:** How do you know it's not working?
+2. **Fallback:** What's the degraded-mode operation?
+3. **Impact:** What quality/capability is lost?
+
+#### Example
+```markdown
+### Step 1: Fetch Data
+
+Call the API with preferred parameters...
+
+**Fallback:** If the API is unavailable:
+- Use cached data from last successful run
+- Note to user: "Using cached data from [date] — results may be stale"
+- Skip time-sensitive analysis
+
+### Step 3: Enrich with External Source
+
+Query the enrichment API...
+
+**Fallback:** If enrichment service is down:
+- Proceed with base data only
+- Note to user: "Enrichment unavailable — categories may be less precise"
+- Impact: ~15% lower categorization accuracy
+```
+
+#### When to use
+- Commands or skills that call external tools or APIs
+- Workflows depending on services that can be intermittently unavailable
+- Any automation where partial success is better than total failure
+
+#### When NOT to use
+- Workflows where partial output is worse than no output (e.g., financial transactions)
+- Steps where the dependency IS the work (no meaningful fallback exists)
+
+---
+
+### Interactive Feedback Loop
+
+**Type:** Workflow
+**Origin:** Common pattern for synthesis and curation workflows
+**Added:** YYYY-MM-DD
+
+#### What it is
+After generating any synthesis, curation, or summarization output, explicitly prompt the user for corrections before finalizing. Captures learning when context is fresh and the user can see exactly what to correct.
+
+#### Why it works
+- **Timing:** User's knowledge is most accessible immediately after seeing output
+- **Specificity:** Corrections are grounded in concrete examples, not abstract preferences
+- **Accumulation:** Each correction can inform future runs (via config, CLAUDE.md, or autoskill)
+- **Engagement:** Transforms passive consumption into active refinement
+
+#### The three prompts
+
+After presenting draft output, ask:
+
+1. **Filter corrections:** "Did I include something off-topic, or miss something relevant?"
+2. **Contextual knowledge:** "Any insights on specific items I should know about?"
+3. **Categorization accuracy:** "Are the groupings/themes right?"
+
+#### Example
+```
+Here's the draft summary with 6 items across 3 themes.
+
+Before I finalize:
+1. Did I include something off-topic, or miss something relevant?
+2. Any context on specific items I should factor in?
+3. Are these theme groupings accurate?
+```
+
+#### When to use
+- Content curation (digests, reading lists, recommendations)
+- Summarization tasks (meeting notes, document synthesis, research briefs)
+- Any output where the user has domain knowledge Claude lacks
+
+#### When NOT to use
+- Purely mechanical tasks with objectively correct output
+- Time-sensitive work where the feedback loop adds unacceptable delay
+- When the user has explicitly said "just do it, don't ask"
+
+---
+
+### Verification-Led Development
+
+**Type:** Workflow
+**Origin:** Boris Cherny / Anthropic
+**Added:** YYYY-MM-DD
+
+#### What it is
+Always give Claude a way to verify its own work — running tests, build commands, linters, or browser automation — before considering a task complete. Claude iterates until verification passes, then submits for human review.
+
+#### Why it works
+- Self-verification catches errors before human review
+- Feedback loops create iterative improvement within a single task
+- Reduces back-and-forth between human and AI
+- Reported to improve output quality by 2-3x
+
+#### How to implement
+
+Add verification instructions to your project's CLAUDE.md:
+
+```markdown
+## Verification
+
+Before declaring any code task complete:
+1. Run `npm test` and fix any failures
+2. Run `npm run lint` and fix any warnings
+3. Run `npm run build` and verify it succeeds
+4. If UI changes: describe what you'd visually verify
+
+Do not ask for human review until all verification passes.
+```
+
+For non-code projects, verification can mean:
+- Re-reading the file you just wrote and checking for consistency
+- Running a consistency check across related files
+- Verifying links, references, and cross-file pointers
+
+#### When to use
+- Any coding task with testable outcomes (features, APIs, UI)
+- Projects with existing test suites, linters, or build commands
+- Workflows where Claude can run verification commands
+
+#### When NOT to use
+- Pure knowledge work with no mechanical verification possible
+- Tasks where "correct" requires human judgment (design, tone, strategy)
+- Quick one-off changes where verification overhead exceeds the task itself
+
+---
+
 *Add new techniques above this line*

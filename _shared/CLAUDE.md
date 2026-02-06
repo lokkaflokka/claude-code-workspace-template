@@ -185,6 +185,27 @@ Consolidated behavioral rules with active enforcement mechanisms. These replace 
 
 ---
 
+## Technical Gotchas
+
+Factual reminders about tools and environment — not behavioral principles, just things to know.
+
+### Claude Code Hooks
+- **SessionStart hook:** You can add a `SessionStart` hook in `~/.claude/settings.json` that runs a command at session start and injects its stdout into context. Useful for date injection, environment checks, or project-specific setup.
+- **Example:** `"SessionStart": [{"command": "echo Today is $(date '+%A, %B %d, %Y')"}]` — solves day-of-week derivation errors by providing the date structurally.
+- **Hook stdout = context:** Exit code 0 + stdout from hook commands is automatically injected into Claude's context. Use this for any "always-available" information.
+
+### External Services
+- **API caching:** Some CDNs and services ignore Cache-Control headers. Use cache-busting query parameters (e.g., `?_cb=${Date.now()}`) when freshness matters.
+- **Cross-system schemas:** When System A writes data for System B, verify schema match explicitly. Don't trust "it worked before."
+
+### File Management
+- **CURRENT_STATE.md size:** Target 50-80 lines. If it grows beyond ~100 lines, extract history to a CHANGELOG.md or archive file.
+- **Environment date:** Use the date from environment context or hooks, not UTC timestamps from external systems.
+
+*Add new gotchas above this line as they're discovered.*
+
+---
+
 ## Common Mistakes
 
 *Legacy section — migrate recurring mistakes into Core Principles above with enforcement mechanisms.*

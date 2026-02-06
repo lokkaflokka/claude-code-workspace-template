@@ -2,6 +2,16 @@
 
 All notable changes to this template.
 
+## [0.1.8] - 2026-02-05
+
+### Added
+- **Preflight Sanity Check** technique — Verify config and external state before running workflows to catch issues early
+- **Fallback Instructions** technique — Document detection, fallback, and impact for every external dependency in workflows
+- **Interactive Feedback Loop** technique — Prompt for corrections after synthesis/curation while context is fresh
+- **Verification-Led Development** technique — Give Claude verification mechanisms (tests, lints, builds) and iterate until they pass
+- **Technical Gotchas** section in `_shared/CLAUDE.md` — Factual reminders about tools and environment (separate from behavioral principles)
+- **Hooks guidance** — SessionStart hook pattern for date injection and environment setup
+
 ## [0.1.7] - 2026-02-05
 
 ### Added

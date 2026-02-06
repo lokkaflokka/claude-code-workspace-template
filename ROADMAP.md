@@ -38,11 +38,11 @@
 | Integration guides (Obsidian, VSCode, etc.) | User requests | Original |
 | **MCP Development Guidance section** | When adding MCP-related content | Eval backfill 2026-01-20 |
 | — DIY Over Framework Lock-in principle | (part of MCP guidance) | Technique: simple agents > frameworks |
-| — Defensive coding (Anxiety.md) pattern | (part of MCP guidance) | Technique: security-sensitive code review |
-| — Fallback Instructions pattern | (part of MCP guidance) | Technique: dependency failure handling |
-| — Preflight Sanity Check pattern | (part of MCP guidance) | Technique: config verification before work |
+| ~~— Defensive coding (Anxiety.md) pattern~~ | ✅ v0.1.7 | Added as "Defensive Code Generation" technique |
+| ~~— Fallback Instructions pattern~~ | ✅ v0.1.8 | Added as "Fallback Instructions" technique |
+| ~~— Preflight Sanity Check pattern~~ | ✅ v0.1.8 | Added as "Preflight Sanity Check" technique |
 | **Autoskill example/guidance** | Interest in self-improving skills | Eval backfill 2026-01-20 |
-| **Interactive Feedback Loop pattern** | Interest in learning capture | Eval backfill 2026-01-20 |
+| ~~**Interactive Feedback Loop pattern**~~ | ✅ v0.1.8 | Added as "Interactive Feedback Loop" technique |
 
 ## Design Decisions
 
