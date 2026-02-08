@@ -581,4 +581,90 @@ For non-code projects, verification can mean:
 
 ---
 
+### Convention Density (Opinionated Frameworks as LLM Multipliers)
+
+**Type:** Workflow
+**Origin:** Garry Tan (Feb 2026) + practitioner observation
+**Added:** YYYY-MM-DD
+
+#### What it is
+LLMs are dramatically more productive when operating within convention-heavy, opinionated systems. The more predictable the patterns, the less ambiguity the LLM faces, and the higher quality its output. "Convention over configuration" isn't just a framework design philosophy — it's an LLM productivity multiplier.
+
+#### Why it works
+- **Reduced ambiguity:** When there's one right way to do something, the LLM doesn't waste tokens deliberating or guessing
+- **Pattern matching strength:** LLMs excel at pattern completion. Dense conventions = more patterns to match against
+- **Error reduction:** Strong conventions constrain the solution space, making incorrect outputs less likely
+- **Compounding returns:** Each convention reinforces others. Session init reads CURRENT_STATE.md (convention) which uses a structured format (convention) with specific sections (convention). The LLM navigates all of this automatically.
+
+#### Examples
+
+**Rails + Claude Code (Garry Tan's observation):**
+Rails prescribes directory structure, naming conventions, migration patterns, routing conventions. Claude Code generates correct Rails code because there's usually one right answer. "LLMs are sugar fiends" — they thrive on syntactic sugar and strong defaults.
+
+**This workspace system:**
+The workspace template is convention-heavy by design — and this is WHY it works:
+- CLAUDE.md in every project (convention) → Claude always knows where to look for instructions
+- Session init protocol (convention) → predictable startup sequence
+- Query routing tables (convention) → deterministic file lookups
+- CURRENT_STATE.md format (convention) → consistent state persistence
+- Technique catalog format (convention) → structured knowledge capture
+
+Each convention is a "rail" that keeps Claude Code on track. The system's productivity comes from convention density, not from any single feature.
+
+#### Applicability notes
+- **High value when:** Building systems that Claude Code will operate in repeatedly. More conventions = faster, more accurate sessions.
+- **Design implication:** When choosing frameworks, libraries, or structuring projects, prefer opinionated options over flexible ones. The "flexibility" of a minimal framework is a tax on LLM productivity.
+- **Anti-pattern:** Over-convention (bureaucratic overhead that slows humans without helping the LLM). Conventions should serve both human readability AND LLM predictability.
+- **Tension with "avoid over-engineering":** Conventions aren't over-engineering if they reduce ambiguity. A CLAUDE.md file isn't gold-plating — it's infrastructure. The test: does this convention make the LLM's next action more predictable?
+
+---
+
+### Exception-Based Reporting (Frequency-Tiered Monitoring)
+
+**Type:** Workflow
+**Origin:** SRE alerting principles + practitioner observation
+**Added:** YYYY-MM-DD
+
+#### What it is
+Recurring status displays should be exception-only at high frequency, with thorough audits at lower frequency. High-frequency = "only show what needs attention." Low-frequency = "check everything." This prevents alert fatigue while maintaining the same coverage.
+
+The key insight: **"all clear" is not information.** Showing 5 green checkmarks alongside 1 red flag trains the reader to skim. Showing only the red flag commands attention.
+
+#### Why it works
+- Reduces cognitive load on high-frequency surfaces (session init reads happen every session)
+- Eliminates "all clear" noise that trains readers to skip the section
+- Thorough checks still happen — just at a sustainable cadence
+- Mirrors SRE alerting principles: page on anomalies, dashboard for trends
+
+#### Example
+Before (verbose CURRENT_STATE.md ALERTS section):
+```
+### Registry Drift
+| ✅ | None detected | ... |
+
+### File Size Exceptions
+| project/CURRENT_STATE.md | 134 | suppressed | ... |
+
+### Pending Updates
+| — | (none) | — | — |
+```
+
+After (exception-only):
+```
+### Packages Needing Attention
+| my-template | Release target Feb 10 |
+
+*Other checks via /consistency-check. Only listed here when actionable.*
+```
+
+Same coverage, far fewer lines read every session. Clean categories checked periodically via `/consistency-check`.
+
+#### Applicability notes
+- **Apply when:** Any status display read more than 1x/week. Session init, dashboards, PR check summaries, monitoring.
+- **Pair with:** A periodic thorough audit at lower cadence (weekly, monthly). The exception-only display is only safe if the thorough check exists.
+- **Anti-pattern:** Exception-only with no thorough audit. If you only show problems, you'll never notice things you forgot to check for.
+- **Related:** Session Initialization Protocol (this technique refines its output format). Also related to "Preflight Sanity Check" — that technique is the thorough audit that complements exception-only init.
+
+---
+
 *Add new techniques above this line*

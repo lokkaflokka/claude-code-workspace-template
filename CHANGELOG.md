@@ -2,6 +2,13 @@
 
 All notable changes to this template.
 
+## [0.1.9] - 2026-02-08
+
+### Added
+- **Convention Density** technique — Opinionated, convention-heavy frameworks multiply LLM productivity by reducing ambiguity and decision surface
+- **Exception-Based Reporting** technique — Frequency-tiered monitoring: exception-only at high frequency, thorough audits at low frequency. Prevents alert fatigue.
+- **File Size Check** in `/consistency-check` — Flags CURRENT_STATE.md >100 lines and CLAUDE.md >300 lines to prevent context bloat
+
 ## [0.1.8] - 2026-02-05
 
 ### Added

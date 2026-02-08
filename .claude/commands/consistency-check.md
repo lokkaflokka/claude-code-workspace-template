@@ -34,6 +34,11 @@ Verify that the workspace registry matches reality and flag any drift.
    - Compare template's last tag date against source system's last modification dates
    - Flag if source files (CLAUDE.md, consistency-check, TECHNIQUES.md) are significantly newer than the template's last release
 
+7. **File Size Check** (prevents context bloat)
+   - Check `CURRENT_STATE.md` files: flag if >100 lines (target: 50-80)
+   - Check `CLAUDE.md` files: flag if >300 lines (target: 200-300)
+   - Run: `wc -l */CURRENT_STATE.md _shared/CURRENT_STATE.md` and `wc -l */CLAUDE.md _shared/CLAUDE.md`
+
 ## Execution Steps
 
 ```bash
@@ -81,6 +86,12 @@ ls -d */ | grep -v "^_" | grep -v "^\."
 - [OK] CURRENT_STATE.md updated within 7 days
   OR
 - [STALE] CURRENT_STATE.md last updated YYYY-MM-DD (X days ago)
+
+### File Sizes (Context Bloat)
+- [OK] _shared/CURRENT_STATE.md: 72 lines (target: 50-80)
+- [OK] finance/CLAUDE.md: 255 lines (target: 200-300)
+  OR
+- [WARN] _shared/CLAUDE.md: 312 lines (target: 200-300) — over limit
 
 ### Summary
 X issues found / All clear
