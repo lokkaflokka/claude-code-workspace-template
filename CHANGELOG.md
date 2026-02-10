@@ -2,6 +2,16 @@
 
 All notable changes to this template.
 
+## [0.2.1] - 2026-02-10
+
+### Improved
+- **Synthetic Testing guide** — Validated by building from scratch against a fresh app. Patches:
+  - Added Prerequisites section (Playwright install, config template, directory structure)
+  - Rewrote Step 2 with concrete app-specific helpers pattern
+  - Replaced pseudocode property assertions with real Playwright implementations
+  - Added concrete generator function pattern with word banks and batch generation
+  - Scrubbed all domain-specific references to keep examples fully generic
+
 ## [0.2.0] - 2026-02-10
 
 ### Added

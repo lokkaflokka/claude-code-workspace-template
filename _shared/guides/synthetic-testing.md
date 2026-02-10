@@ -25,6 +25,47 @@ Each tier builds on the previous. Start at Tier 0 — it's independently useful.
 
 ---
 
+## Prerequisites
+
+Before starting, you need a testable web app and Playwright installed.
+
+**Install Playwright:**
+```bash
+npm install -D @playwright/test
+npx playwright install chromium
+```
+
+**Create a Playwright config** (`playwright.config.ts`):
+```typescript
+import { defineConfig } from '@playwright/test';
+
+export default defineConfig({
+  testDir: './tests/synthetic/flows',
+  timeout: 60_000,
+  use: {
+    baseURL: 'http://localhost:4173',  // or your dev server port
+    viewport: { width: 390, height: 844 },
+  },
+  webServer: {
+    command: 'npm run preview',  // serve your built app
+    port: 4173,
+    reuseExistingServer: true,
+  },
+});
+```
+
+**Create the directory structure:**
+```bash
+mkdir -p tests/synthetic/{flows,generators,evaluation,results}
+```
+
+**Build your app** before running tests — Playwright's `webServer` serves the built output:
+```bash
+npm run build && npx playwright test
+```
+
+---
+
 ## Tier 0: Scripted Flows + Rubric Evaluation
 
 The foundation. Define 3-5 user archetypes, write Playwright/Cypress flows that model their journeys, and evaluate screenshots with a vision LLM against a structured rubric.
@@ -46,34 +87,65 @@ Define 3-5 archetypes that span your user space. Each archetype should occupy a 
 - Expected system responses for their inputs
 - Multi-day sequences (Day 1 behavior, Day 2, Day 7 return)
 
-### Step 2: Write Playwright Flows
+### Step 2: Write App-Specific Helpers + Playwright Flows
 
-Each archetype gets a scripted journey through your app. Use fixture data that matches their profile.
+First, create a `helpers.ts` with functions that wrap your app's UI interactions. These are specific to YOUR app — every app needs its own helpers.
 
 ```typescript
-// Example: scripted Day 1 flow for a "power user" archetype
-test('Power User — Day 1: Rapid multi-item capture', async ({ page }) => {
-  await setupTest(page, '2026-03-01', 8); // Mock date + time
+// tests/synthetic/flows/helpers.ts — example for a bookmark manager
+import { type Page, expect } from '@playwright/test';
 
+export async function setupTest(page: Page) {
   await page.goto('/');
-  await captureItem(page, 'Q1 board deck, review hiring pipeline, 1:1 with Jamie');
-  await waitForAnimations(page);
+  await page.evaluate(() => localStorage.clear());
+  await page.reload();
+  await page.waitForTimeout(300);
+}
 
-  // Verify items were split and stored correctly
+export async function addBookmark(page: Page, data: { name: string; category?: string }) {
+  await page.click('button[aria-label="Add bookmark"]');
+  await page.fill('input[aria-label="Title"]', data.name);
+  if (data.category) {
+    await page.selectOption('select[aria-label="Category"]', data.category);
+  }
+  await page.click('button[aria-label="Save"]');
+  await page.waitForTimeout(300);
+}
+
+export async function getStoredItems(page: Page): Promise<any[]> {
+  return page.evaluate(() => {
+    const raw = localStorage.getItem('my_app_data');
+    return raw ? JSON.parse(raw) : [];
+  });
+}
+
+export async function waitForAnimations(page: Page) {
+  await page.waitForTimeout(500);
+}
+```
+
+Then write each archetype's flow using these helpers:
+
+```typescript
+// tests/synthetic/flows/power-user.spec.ts
+test('Power User — rapid multi-item entry', async ({ page }) => {
+  await setupTest(page);
+
+  await addBookmark(page, { name: 'Playwright docs', category: 'Dev' });
+  await addBookmark(page, { name: 'Design inspiration', category: 'Design' });
+  await addBookmark(page, { name: 'TypeScript handbook', category: 'Dev' });
+
   const items = await getStoredItems(page);
   expect(items).toHaveLength(3);
-
-  // Verify timing inference
-  const deck = items.find(i => i.text.includes('board deck'));
-  expect(deck.timing).toBe('today');
 });
 ```
 
 **Key patterns:**
-- Mock date/time so tests are deterministic (`addInitScript` for Date override)
-- Use helper functions (`captureItem`, `getStoredItems`, `waitForAnimations`) to keep flows readable
-- Test the full loop: input → processing → display → persistence → cross-day carry-forward
-- Each archetype tests different paths (voice capture, text capture, multi-item, single-item, etc.)
+- **Helpers are app-specific** — write them for YOUR app's UI elements and data model
+- Use `aria-label` selectors for reliability and accessibility alignment
+- Mock date/time if your app is time-sensitive (`addInitScript` for Date override)
+- Test the full loop: input → processing → display → persistence
+- Each archetype tests different paths through the same app
 
 ### Step 3: Build an Evaluation Rubric
 
@@ -169,18 +241,57 @@ Build generators for each input type your app accepts:
 | **Very long strings** | 500-character single items, items with URLs | Overflow and truncation |
 | **Typos** | "gorceries", "tex mom" | Graceful degradation |
 
+**Structure generators as functions** that accept a `SeededRandom` and return tagged data:
+
+```typescript
+// Word banks for your domain
+const NORMAL_ITEMS = ['weekly standup', 'design review', 'ship v2 landing page'];
+const WEIRD_ITEMS = ['', 'a'.repeat(500), '🍕🍕🍕', 'TBD???'];
+
+export function generateInput(rng: SeededRandom, fuzz: boolean): string {
+  if (fuzz && rng.chance(0.2)) return rng.pick(WEIRD_ITEMS);
+  return rng.pick(NORMAL_ITEMS);
+}
+
+// Generate a batch with mixed fuzz levels
+export function generateBatch(rng: SeededRandom, count: number) {
+  return Array.from({ length: count }, () => ({
+    input: generateInput(rng, rng.chance(0.6)),
+    fuzzLevel: rng.chance(0.4) ? 'clean' : 'fuzzed',
+  }));
+}
+```
+
 ### Universal Property Assertions
 
-These must hold for ANY generated input — they're your invariants:
+These must hold for ANY generated input — they're your invariants. Here's how to implement each one in Playwright:
 
 ```typescript
 // After any fuzzed input submission:
-expect(appDidNotCrash).toBeTruthy();
-expect(previousDataIntact).toBeTruthy();
-expect(noShameLanguage).toBeTruthy();
-expect(capturedTextVisibleSomewhere).toBeTruthy();
-expect(noNavigationDeadEnds).toBeTruthy();
+
+// 1. App didn't crash (page is still responsive)
+const alive = await page.evaluate(() => true).catch(() => false);
+expect(alive, `App crashed after input: "${input}"`).toBeTruthy();
+
+// 2. No data loss (item count only goes up)
+const currentCount = (await getStoredItems(page)).length;
+expect(currentCount, 'Data lost after submission').toBeGreaterThanOrEqual(prevCount);
+
+// 3. No shame/urgency language in the UI
+const bodyText = await page.locator('body').innerText();
+const SHAME_PATTERNS = [/overdue/i, /you forgot/i, /behind/i, /urgent/i, /failed/i];
+for (const pattern of SHAME_PATTERNS) {
+  expect(bodyText, `Shame language found: ${pattern}`).not.toMatch(pattern);
+}
+
+// 4. Submitted content is visible somewhere
+expect(bodyText).toContain(input.substring(0, 30));
+
+// 5. Navigation works (back button or home link always present)
+// Adapt this check to your app's navigation pattern
 ```
+
+**Tip:** The `page.evaluate(() => true).catch(() => false)` pattern is the simplest crash detection — if the page is unresponsive, the evaluate call throws.
 
 ---
 
@@ -308,7 +419,7 @@ constraints.
 
 Your cognitive constraints:
 - You get distracted mid-task and might forget what you were about to do
-- You have limited activation energy — if this asks too much, you'll close it
+- You have limited patience — if this asks too much effort, you'll close it
 - Ambiguity makes you uncomfortable — you need things to feel "done"
 
 Rules:
@@ -334,7 +445,7 @@ ACTION: {"action": "scroll", "direction": "down"}
 The monologue captures:
 - **Confusion** — "I don't know what this button does"
 - **Frustration** — "I already did this, why is it asking again?"
-- **Shame** — "Seeing all these undone items makes me feel bad"
+- **Shame** — "This empty state makes me feel like I'm doing it wrong"
 - **Delight** — "Oh, it remembered what I said yesterday. That's nice."
 - **Cognitive overload** — "There's too much on this screen"
 
