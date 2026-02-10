@@ -87,6 +87,8 @@ When asked to evaluate a technique:
 | `TECHNIQUES.md` | Catalog of patterns and techniques |
 | `EVALUATION_LOG.md` | Tracking of technique evaluations |
 | `PROJECTS.md` | Registry of all projects |
+| `guides/simulated-expert-panels.md` | Methodology: multi-round validation panels with persistent AI personas |
+| `guides/synthetic-testing.md` | Methodology: tiered synthetic testing from scripted flows to LLM-as-user |
 
 ## Discovery Protocol (for larger projects)
 

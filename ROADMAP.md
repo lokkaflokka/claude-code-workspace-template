@@ -22,6 +22,13 @@
 - [x] Day 7 snapshot example (`_example-project-day7/`)
 - [ ] LinkedIn post drafted and published
 
+## v0.2.0 (2026-02-10) — Methodology Guides
+
+- [x] `_shared/guides/` directory with distributable methodology guides
+- [x] Simulated Expert Panels guide (persistent personas, multi-round validation, convergence detection)
+- [x] Synthetic Testing guide (5-tier framework: scripted → fuzzed → combinatorial → LLM-as-user → multi-session)
+- [x] Updated `_shared/CLAUDE.md` file index
+
 ## Post-Distribution
 
 - [ ] Gather feedback from early users

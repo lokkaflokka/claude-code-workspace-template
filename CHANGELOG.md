@@ -2,6 +2,14 @@
 
 All notable changes to this template.
 
+## [0.2.0] - 2026-02-10
+
+### Added
+- **Methodology Guides** — New `_shared/guides/` directory with two distributable methodology guides:
+  - **Simulated Expert Panels** (`simulated-expert-panels.md`) — Multi-round validation panels with persistent AI personas. Covers persona design, round execution, verdict evolution, convergence detection, and panel rotation. Generic methodology applicable to product decisions, system design reviews, career decisions, and risk assessment.
+  - **Synthetic Testing** (`synthetic-testing.md`) — Tiered automated testing framework scaling from scripted flows to LLM-driven exploration. 5-tier architecture (scripted → fuzzed → combinatorial → LLM-as-user → multi-session), with implementation patterns for seeded randomness, persona generation, vision provider abstraction, tiered model selection, and cost modeling.
+- Updated `_shared/CLAUDE.md` file index with guides references
+
 ## [0.1.9] - 2026-02-08
 
 ### Added
