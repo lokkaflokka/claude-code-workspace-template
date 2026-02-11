@@ -2,6 +2,29 @@
 
 All notable changes to this template.
 
+## [0.3.0] - 2026-02-11
+
+### Changed
+- **Session Initialization Protocol** — Full rewrite synced with production system:
+  - Exception-only output format (sections omitted when clean, no "all clear" lines)
+  - Capture staging area (INBOX.md) with "Anything to capture?" prompt
+  - Three-list reminder architecture (session context / offline tasks / quick capture inbox)
+  - Completed item processing with state file cross-referencing
+  - Due today/tomorrow surfacing for non-recurring offline items
+  - Consistency checks removed from init (run `/consistency-check` separately)
+- **Core Principles expanded from 6 to 7:**
+  - New **#5: Boundaries Are Sacred** — code/data separation, PHI/PII rule
+  - **#1** gains vault-first check and action-reminder pairing in session-end checklist
+  - **#6 (was #5)** gains build verification, no-duplicated-logic check
+  - **#7 (was #6)** gains vault-first rule, entity rule, action-reminder pairing rule, list placement guidance
+  - All principles now include "Violations this prevents" sections
+- **Technical Gotchas significantly expanded** — 6 categories (Claude Code Hooks, Reminder Systems, AppleScript, MCP Development, External Services, macOS Filesystem) with 17 specific gotchas from 40+ production sessions
+- **`_context` version** bumped to 2.0
+
+### Removed
+- "Common Mistakes" section — fully migrated into Core Principles with enforcement mechanisms
+- Consistency check from session init (now runs at its own cadence via `/consistency-check`)
+
 ## [0.2.1] - 2026-02-10
 
 ### Improved

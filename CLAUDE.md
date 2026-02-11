@@ -6,39 +6,54 @@ This is the workspace root — a meta/organizational layer that spans all projec
 
 **MANDATORY on every new session at this level — no exceptions, even if the user's first message is an explicit action request or plan.**
 
-The user opening with "implement this plan" or "do X" does NOT skip initialization. Run init first, present the summary, THEN proceed to the user's request.
+The user opening with "implement this plan" or "do X" does NOT skip initialization. Run init first, present the summary, THEN proceed to the user's request. Reminders due today are often directly relevant to the work being requested. Skipping init means missing this context.
 
 **Steps (run before any other work):**
 
-1. **Read `_shared/CURRENT_STATE.md`** — Meta-level dashboard
-2. **Check reminders/deadlines** — Whatever reminder system you use (Apple Reminders, Things, etc.):
+1. **Read `_shared/CURRENT_STATE.md`** — Meta-level dashboard (context for session, not reported directly)
+2. **Check capture staging area** — Read `_shared/INBOX.md` (if it exists) for unrouted items. Also ask: "Anything to capture since last session?" — the user may have items from any source.
+3. **Check reminders/deadlines** — Whatever reminder system you use:
    - **Anchor today's date first** from the environment `Today's date` field — all "due in X days" calculations MUST use this. Do not infer or assume the date.
-   - **Completed reminders since last session:** If any reminders completed since the last session, surface them and ask the user for outcomes. These represent actions taken outside the session — state files may need updating.
-3. **Run consistency check** — Registry drift, technique freshness, file sizes
-4. **Clarify if intent seems project-specific** — If the request clearly belongs to one project, ask which before diving in
+   - **Recommended list architecture** (3 lists): (1) items needing session context, (2) offline/personal tasks, (3) quick capture inbox. Triage inbox items each session.
+   - **Upcoming deadlines:** Surface open items due within 7 days from your "needs session context" list.
+   - **Due today/tomorrow:** Surface non-recurring items due today/tomorrow from your "offline tasks" list (skip recurring habits/errands).
+   - **Completed item processing:** Scan for items completed since last session. Cross-reference against CURRENT_STATE.md — if the outcome is already reflected in state files, skip silently. If not reflected, surface and ask for details. Skip obvious recurring habits.
+4. **Clarify if intent seems project-specific** — If the request clearly belongs to one project, ask which before diving in.
 5. **Otherwise, recognize meta-level patterns:**
    - "New technique" → Document in `_shared/TECHNIQUES.md`, evaluate, log
    - "Cross-project work" → Identify which projects are involved
    - "New project setup" → Create from `_example-project/` template
 
-**Output format rules:**
-- **Compact lines, no tables** — keep the whole summary scannable
-- **Reminders:** Show open items due within 7 days. 🔴 ≤1 day, ⏳ 2-3 days, bullet for 4-7 days.
-- **Completed since last session:** Surface any recently completed reminders. Ask for outcomes — these are actions taken outside the session that may require state file updates.
-- **Alerts: only surface issues.** If everything is clean, print `⚠️ ALERTS: None`. Don't enumerate "all clear" categories.
-- **Last session:** One line — focus and what was left off.
+**Output format — exception-only:**
 
-**Example session start:**
+The init readout only surfaces things that need attention. If a category has nothing actionable, it doesn't appear. No "all clear" lines.
+
+- **INBOX:** Only mention if unrouted items exist.
+- **Reminders:** Show items due within 7 days. 🔴 ≤1 day, ⏳ 2-3 days, • 4-7 days. Omit section if nothing due.
+- **Today:** Non-recurring items due today/tomorrow. 📋 marker. Omit if none.
+- **Completed since last session:** Only show completions not yet reflected in state files. Omit if all are already reflected.
+- **ALERTS from CURRENT_STATE.md:** Exception-only — only surface actionable alerts. Clean categories don't appear.
+- **Last session:** Always show — one line with focus and what was left off.
+- **Capture prompt:** Always end with "Anything to capture since last session?"
+
+**NOT included in init** (available separately):
+- **Consistency checks** → run `/consistency-check`
+- These run at their own cadence, not every session.
+
+**Example — typical session (some things need attention):**
 ```
-📅 REMINDERS (next 7 days):
-  🔴 Tomorrow: Submit expense report
-  ⏳ Feb 4: Review quarterly goals
-  • Feb 7: Team sync prep
+🔴 Feb 4: Submit expense report
+⏳ Feb 7: Review quarterly goals
+📋 Today: Pick up prescription
 
-⚠️ ALERTS: None
-🔄 Last session (Jan 31): Worked on travel automation. Left off: booking flow.
+🔄 Last session (Feb 3): Travel automation. Left off: booking flow.
+Anything to capture?
+```
 
-What would you like to focus on today?
+**Example — nothing urgent:**
+```
+🔄 Last session (Feb 3): Documented 2 techniques, evaluated 1.
+Anything to capture?
 ```
 
 ## Query Routing
@@ -74,6 +89,7 @@ What would you like to focus on today?
 |------|---------|
 | `CLAUDE.md` | This file — top-level session initialization |
 | `_shared/CURRENT_STATE.md` | Meta-level dashboard with alerts |
+| `_shared/INBOX.md` | Capture staging area (unrouted items) |
 | `_shared/TECHNIQUES.md` | Pattern catalog |
 | `_shared/PROJECTS.md` | Project registry |
 | `README.md` | Setup guide and philosophy |
