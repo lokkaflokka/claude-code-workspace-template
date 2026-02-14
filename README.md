@@ -248,6 +248,8 @@ Keep files focused to avoid "context bloat" — the tax Claude pays reading long
 
 **If a file grows too large:** Extract content to linked documents. CLAUDE.md should say "see `playbooks/rebalancing.md`" rather than containing the full playbook.
 
+**Dashboard vs Domain State:** Data-heavy domains (finance, engineering metrics, inventory) often outgrow the 50-80 line target because CURRENT_STATE.md is doing two jobs: session dashboard (what needs attention) and data reference (numbers you work with). When this happens, split into two files: the dashboard stays scannable for init, and a domain state file holds the working data — read on demand during domain sessions, not every init. If the data also lives in an external tool (spreadsheet, database), the file should be the *interpretation layer* (context, narrative, watch items), not a copy of the numbers.
+
 ### Session Closing Ritual
 
 Before ending any session, update state:

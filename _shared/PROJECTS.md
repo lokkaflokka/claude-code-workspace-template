@@ -48,7 +48,7 @@ If projects depend on external packages or tools, track the relationships here.
 *Example:*
 | Project | Package | Version | Notes |
 |---------|---------|---------|-------|
-| newsletters | mcp-content-reader | 0.2.0 | Gmail integration |
+| content-feed | mcp-content-reader | 0.2.0 | Gmail integration |
 | finance | — | — | No external packages |
 
 ---
