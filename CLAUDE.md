@@ -2,6 +2,54 @@
 
 This is the workspace root — a meta/organizational layer that spans all projects.
 
+## LLM Usage Policy (Two-Lane Model)
+
+*Add this section if your company provides a different LLM (e.g., Gemini, ChatGPT Enterprise). Skip if Claude is the only LLM in your workflow.*
+
+**Principle:** Company-approved LLM handles sensitive inputs. Personal Claude handles only non-sensitive work with placeholders.
+
+**Default rule:** If unsure whether content is sensitive, use the company LLM.
+
+### Lane A: Company LLM (Sensitive)
+
+Use when input contains ANY of:
+- Customer/member identifiers (names, emails, IDs)
+- Production extracts (logs, screenshots, support tickets, raw query results)
+- Secrets/credentials (API keys, tokens, passwords, private URLs)
+- Security details (incident content, vulnerabilities, internal controls)
+- Contracts, pricing, unreleased strategy, or partner terms
+
+### Lane B: Claude (Non-Sensitive)
+
+Allowed:
+- Architecture/design tradeoffs, system diagrams, data modeling patterns
+- Drafting PRDs, ADRs, RFCs using **placeholders** (no real names/data)
+- Templates, checklists, runbooks, test plans, evaluation frameworks
+- Code refactors with no secrets or sensitive payloads
+- Abstracted synthesis from sensitive work (no raw snippets or identifiers)
+
+### Sensitivity Lint (10 seconds, every prompt)
+
+Before sending to Claude:
+1. Does this contain identifiers or direct extracts (PII, logs, rows, screenshots)?
+2. Could this reveal customer, partner, or production internals?
+3. Would I avoid putting this in a company-wide Slack channel?
+
+**Any YES = Company LLM.** All NO = Claude.
+
+### Redaction Standard
+
+When sanitizing for Claude, use these placeholders:
+- **Entities:** `CUSTOMER_A`, `PAYER_B`, `VENDOR_C`
+- **Tables:** `TABLE_CLAIMS`, `TABLE_ELIG`, `TABLE_PAYMENTS`
+- **IDs:** `MEMBER_#`, `CLAIM_#`, `ID_1`
+- **Dates:** `2026-Q1`, `T-7d`, `MONTH_YEAR`
+- **Numbers:** `~Nk rows`, `p95 ~Xs`, bucketed ranges (low/med/high)
+
+Translate once, then ask Claude for the general solution. For structured handoffs, see `templates/COMPANY_LLM_HANDOFF.md`.
+
+---
+
 ## Session Initialization Protocol
 
 **MANDATORY on every new session at this level — no exceptions, even if the user's first message is an explicit action request or plan.**
@@ -18,8 +66,9 @@ The user opening with "implement this plan" or "do X" does NOT skip initializati
    - **Upcoming deadlines:** Surface open items due within 7 days from your "needs session context" list.
    - **Due today/tomorrow:** Surface non-recurring items due today/tomorrow from your "offline tasks" list (skip recurring habits/errands).
    - **Completed item processing:** Scan for items completed since last session. Cross-reference against CURRENT_STATE.md — if the outcome is already reflected in state files, skip silently. If not reflected, surface and ask for details. Skip obvious recurring habits.
-4. **Clarify if intent seems project-specific** — If the request clearly belongs to one project, ask which before diving in.
-5. **Otherwise, recognize meta-level patterns:**
+4. **Check sync inbox** — Glob `_shared/sync/inbox/*.md`. If packets exist, surface: "📨 N sync packets pending in inbox." Process with `/sync-review`. Omit if empty.
+5. **Clarify if intent seems project-specific** — If the request clearly belongs to one project, ask which before diving in.
+6. **Otherwise, recognize meta-level patterns:**
    - "New technique" → Document in `_shared/TECHNIQUES.md`, evaluate, log
    - "Cross-project work" → Identify which projects are involved
    - "New project setup" → Create from `_example-project/` template
@@ -29,6 +78,7 @@ The user opening with "implement this plan" or "do X" does NOT skip initializati
 The init readout only surfaces things that need attention. If a category has nothing actionable, it doesn't appear. No "all clear" lines.
 
 - **INBOX:** Only mention if unrouted items exist.
+- **Sync inbox:** Show if packets exist in `_shared/sync/inbox/`. 📨 marker. Omit if empty.
 - **Reminders:** Show items due within 7 days. 🔴 ≤1 day, ⏳ 2-3 days, • 4-7 days. Omit section if nothing due.
 - **Today:** Non-recurring items due today/tomorrow. 📋 marker. Omit if none.
 - **Completed since last session:** Only show completions not yet reflected in state files. Omit if all are already reflected.
@@ -93,3 +143,6 @@ Anything to capture?
 | `_shared/TECHNIQUES.md` | Pattern catalog |
 | `_shared/PROJECTS.md` | Project registry |
 | `README.md` | Setup guide and philosophy |
+| `SYNC_PROTOCOL.md` | Cross-machine learning sync protocol |
+| `MCP_SETUP.md` | MCP workspace setup guide |
+| `SNIPPETS.md` | Claude Code prompt reference |

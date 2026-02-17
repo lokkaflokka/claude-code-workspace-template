@@ -284,6 +284,70 @@ Make this muscle memory. Consistent state updates are what create continuity. So
 
 This structure is for *context*, not secrets. If you're unsure, don't include it.
 
+## Work / Company Setup
+
+If you're bootstrapping this template for a work context (separate from a personal system):
+
+### Setup Lifecycle
+
+```
+1. Clone template → work laptop
+2. Customize CLAUDE.md files (company name, role, team)
+3. Remove the git remote (repo now contains identifying details)
+4. Use locally — all work stays on work machine
+5. Sync generalizable learnings back via sync protocol
+```
+
+### Steps
+
+1. **Clone the template:**
+   ```bash
+   git clone https://github.com/your-username/claude-code-workspace-template.git ~/Projects
+   cd ~/Projects
+   ```
+
+2. **Customize root `CLAUDE.md`:**
+   - Fill in the LLM Usage Policy with your company's approved LLM
+   - Update Session Initialization to reference your reminder system
+   - Add work-specific query routing
+
+3. **Create your role-specific project:**
+   - Copy `_example-project/` to `work/` (or your role name)
+   - Customize `work/CLAUDE.md` with role context, team structure, domain knowledge
+   - See `templates/` for role-specific scaffolds if available
+
+4. **Remove the remote:**
+   ```bash
+   git remote remove origin
+   ```
+   After customization, the repo contains company names and role details. It should NOT be pushed back to GitHub. The remote is for initial clone only.
+
+5. **Set up MCP (optional, phased):**
+   - See `MCP_SETUP.md` for a phased approach to MCP tools at work
+   - Week 1-2: No MCP needed — Claude Code works well standalone
+   - Week 3+: Add read-only connectors as the need emerges
+
+6. **Set up sync (optional):**
+   - Create `_shared/sync/` directory structure per `SYNC_PROTOCOL.md`
+   - Enables bidirectional learning between work and personal machines
+
+### Verification
+
+```bash
+# No remote configured (prevents accidental push)
+git remote -v  # should be empty
+
+# No PII in committed content
+grep -ri "real-name\|real-email" .  # customize search terms
+
+# Structure intact
+ls _shared/CURRENT_STATE.md _shared/TECHNIQUES.md CLAUDE.md
+```
+
+### What Stays on the Work Machine
+
+Everything after customization. The work-context fork is **local-only** — it diverges from the template immediately and never syncs back via git. Generalizable learnings flow through the sync protocol (`SYNC_PROTOCOL.md`), not git merges.
+
 ## The Personal ↔ Distributable Boundary
 
 If you build tools (MCP packages, scripts, etc.) alongside your knowledge vaults, keep them separate:

@@ -74,12 +74,14 @@ Consolidated behavioral rules with active enforcement mechanisms.
 - [ ] **If code/package commits were made:** version bump + tag + reference updates per Principle #6
 - [ ] **Vault-first check:** Every reminder/tracked item that references a vault file → that file contains the relevant content. No dangling pointers.
 - [ ] **Action-reminder pairing:** Every item in state file "Action Required" or "Pending Actions" sections has a paired reminder. No orphaned actions.
+- [ ] **Sync capture:** Anything generalizable from this session? If yes, append to `_shared/sync/staging.md`. (See `SYNC_PROTOCOL.md`)
 
 **Violations this prevents:**
 - Designs discussed but not documented
 - Phases declared complete without artifacts
 - Reminders pointing to vault files that don't have the content
 - Actionable items written to state files without a corresponding reminder
+- Generalizable learnings lost in conversation instead of captured for sync
 
 ---
 
@@ -134,10 +136,18 @@ Consolidated behavioral rules with active enforcement mechanisms.
 
 **PHI/PII rule:** If your system tracks sensitive data (health, financial, credentials), designate it as **local-files-only**. Never in: reminder bodies synced to cloud, git repos, or conversation as storage. References point to vault files without containing the data.
 
+**Post-customization rule:** After filling in company names, roles, and people in CLAUDE.md files, the repo contains details that should not be pushed to personal GitHub. Remove the remote (`git remote remove origin`) — see README.md → Work / Company Setup.
+
+**LLM boundary rule:** If multiple LLMs are in use (company-approved vs personal), define a clear sensitivity boundary. Sensitive inputs (PII, production data, credentials, internal incident details) go only to the company-sanctioned LLM. Personal/external LLMs handle only non-sensitive work with placeholders. See root `CLAUDE.md` → LLM Usage Policy for lane definitions and sensitivity lint. Default to the company-sanctioned tool when unsure.
+
+**MCP isolation rule:** Personal and work MCP servers are completely separate — different configs, different packages, different credentials, different machines.
+
 **Violations this prevents:**
 - Personal naming leaking into packages
 - Personal outputs saved in git repos
 - Sensitive data in transmitted surfaces
+- Sensitive data sent to non-company-sanctioned LLM
+- Personal MCP tools accessing work data or vice versa
 
 ---
 

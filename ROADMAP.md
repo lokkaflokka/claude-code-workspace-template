@@ -29,6 +29,19 @@
 - [x] Synthetic Testing guide (5-tier framework: scripted → fuzzed → combinatorial → LLM-as-user → multi-session)
 - [x] Updated `_shared/CLAUDE.md` file index
 
+## v0.4.0 (2026-02-16) — Work Context + Sync Protocol
+
+- [x] LLM Usage Policy (two-lane model, sensitivity lint, redaction standard)
+- [x] Sync Protocol for cross-machine learning transfer
+- [x] `/sync-review` slash command
+- [x] MCP Setup Guide (phased, isolated)
+- [x] Company LLM Handoff template
+- [x] Trial Evidence Log template
+- [x] Snippets reference with `ccsync`
+- [x] Work / Company Setup section in README
+- [x] Principle #5 gains post-customization, LLM boundary, MCP isolation rules
+- [x] Principle #1 gains sync capture in session-end checklist
+
 ## Post-Distribution
 
 - [ ] Gather feedback from early users

@@ -2,6 +2,27 @@
 
 All notable changes to this template.
 
+## [0.4.0] - 2026-02-16
+
+### Added
+- **LLM Usage Policy** (Two-Lane Model) — Company-approved LLM handles sensitive inputs, personal Claude handles non-sensitive work with placeholders. Includes sensitivity lint, redaction standard, and lane definitions. Added to root CLAUDE.md.
+- **Sync Protocol** (`SYNC_PROTOCOL.md`) — Bidirectional learning sync between workspace forks (personal + work). Sync packets, staging/inbox/outbox directory structure, 4 enforcement points, sanitization checklist.
+- **`/sync-review` slash command** — Process sync inbox and produce outbound packets in one command.
+- **MCP Setup Guide** (`MCP_SETUP.md`) — Phased approach to MCP tools at work. Plugin manifest interface, work/personal isolation, security checklist.
+- **Company LLM Handoff Template** (`templates/COMPANY_LLM_HANDOFF.md`) — Structured template for passing abstracted findings from company LLM to Claude.
+- **Trial Evidence Log** (`templates/TRIAL_LOG.md`) — Template for tracking Claude Code wins, time savings, and quality improvements to build the case for company-credentialed access.
+- **Snippets Reference** (`SNIPPETS.md`) — Quick-reference for common Claude Code prompts. Session flow, operations, and systems thinking snippets with `ccsync` entry.
+- **Work / Company Setup** section in README — Setup lifecycle, steps, verification, and what stays on the work machine.
+
+### Changed
+- **Principle #5 (Boundaries Are Sacred)** gains three new rules:
+  - Post-customization rule (remove remote after filling in company details)
+  - LLM boundary rule (sensitivity boundary between company and personal LLMs)
+  - MCP isolation rule (separate configs, packages, credentials)
+- **Principle #1 (Files Are The Work Product)** gains sync capture in session-end checklist
+- **Session init** gains sync inbox check (new step 4)
+- **Key Files table** expanded with SYNC_PROTOCOL.md, MCP_SETUP.md, SNIPPETS.md
+
 ## [0.3.0] - 2026-02-11
 
 ### Changed
