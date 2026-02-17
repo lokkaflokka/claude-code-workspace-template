@@ -158,7 +158,8 @@ your-workspace/
 │   └── CURRENT_STATE.md         # With deadlines, working memory, history
 └── .claude/
     └── commands/
-        └── consistency-check.md # Registry verification command
+        ├── consistency-check.md # Registry verification command
+        └── reflect.md           # Session-end state persistence + review
 ```
 
 **Two examples included:**

@@ -69,12 +69,10 @@ Consolidated behavioral rules with active enforcement mechanisms.
 - If no: persist before moving on.
 
 **Session-end checklist** (verify before closing out):
-- [ ] `CURRENT_STATE.md` — reflects what was done and where we left off
-- [ ] Vault-level state files — if work touched a specific project
-- [ ] **If code/package commits were made:** version bump + tag + reference updates per Principle #6
-- [ ] **Vault-first check:** Every reminder/tracked item that references a vault file → that file contains the relevant content. No dangling pointers.
-- [ ] **Action-reminder pairing:** Every item in state file "Action Required" or "Pending Actions" sections has a paired reminder. No orphaned actions.
-- [ ] **Sync capture:** Anything generalizable from this session? If yes, append to `_shared/sync/staging.md`. (See `SYNC_PROTOCOL.md`)
+- [ ] **Run `/reflect`** — handles all session-end work: state file updates, vault-first check, action-reminder pairing, sync capture, decay check, backlog sync, technique/pattern review, session log. Full protocol in the skill file.
+- [ ] **Verify nothing was missed** — quick gut check: any work discussed but not persisted in files?
+
+**Why a skill?** Session-end checklists in CLAUDE.md get compressed or skipped under context pressure. A skill can't be compressed away — invoking `/reflect` loads the full protocol every time. See `_shared/TECHNIQUES.md` → Structural Enforcement for the general principle.
 
 **Violations this prevents:**
 - Designs discussed but not documented

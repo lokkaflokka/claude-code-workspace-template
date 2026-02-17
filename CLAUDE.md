@@ -56,17 +56,26 @@ Translate once, then ask Claude for the general solution. For structured handoff
 
 The user opening with "implement this plan" or "do X" does NOT skip initialization. Run init first, present the summary, THEN proceed to the user's request. Reminders due today are often directly relevant to the work being requested. Skipping init means missing this context.
 
-**Steps (run before any other work):**
+**Steps 1-4 — run ALL in parallel (single tool call batch):**
 
 1. **Read `_shared/CURRENT_STATE.md`** — Meta-level dashboard (context for session, not reported directly)
-2. **Check capture staging area** — Read `_shared/INBOX.md` (if it exists) for unrouted items. Also ask: "Anything to capture since last session?" — the user may have items from any source.
-3. **Check reminders/deadlines** — Whatever reminder system you use:
+2. **Read `_shared/INBOX.md`** (if it exists) — Capture staging area for unrouted items.
+3. **Check reminders/deadlines** — Whatever reminder system you use.
+4. **Check sync inbox** — Glob `_shared/sync/inbox/*.md`.
+
+**After parallel batch completes, process results:**
+
+- **Capture staging (step 2):** Also ask: "Anything to capture since last session?" — the user may have items from any source.
+- **Reminders (step 3):**
    - **Anchor today's date first** from the environment `Today's date` field — all "due in X days" calculations MUST use this. Do not infer or assume the date.
    - **Recommended list architecture** (3 lists): (1) items needing session context, (2) offline/personal tasks, (3) quick capture inbox. Triage inbox items each session.
    - **Upcoming deadlines:** Surface open items due within 7 days from your "needs session context" list.
    - **Due today/tomorrow:** Surface non-recurring items due today/tomorrow from your "offline tasks" list (skip recurring habits/errands).
    - **Completed item processing:** Scan for items completed since last session. Cross-reference against CURRENT_STATE.md — if the outcome is already reflected in state files, skip silently. If not reflected, surface and ask for details. Skip obvious recurring habits.
-4. **Check sync inbox** — Glob `_shared/sync/inbox/*.md`. If packets exist, surface: "📨 N sync packets pending in inbox." Process with `/sync-review`. Omit if empty.
+- **Sync inbox (step 4):** If packets exist, surface: "📨 N sync packets pending in inbox." Process with `/sync-review`. Omit if empty.
+
+**Steps 5-6 — sequential, after data is loaded:**
+
 5. **Clarify if intent seems project-specific** — If the request clearly belongs to one project, ask which before diving in.
 6. **Otherwise, recognize meta-level patterns:**
    - "New technique" → Document in `_shared/TECHNIQUES.md`, evaluate, log

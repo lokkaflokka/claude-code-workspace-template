@@ -9,7 +9,7 @@ For auto-expansion, import into your text expander (Raycast, macOS Text Replacem
 | Keyword | Prompt |
 |---------|--------|
 | `ccstart` | Read CURRENT_STATE.md and surface any alerts. Show me what needs attention and where we left off last session. |
-| `ccend` | Before we end: Update CURRENT_STATE.md with what we accomplished and where we left off. Check if any techniques emerged worth documenting. Verify no uncommitted work. Surface one specific, actionable improvement from this session's work. What should I know for next session? |
+| `ccend` | Run /reflect |
 | `ccreflect` | Pause and reflect on the work chunk we just completed. What did we learn? Are there patterns worth extracting, mistakes to document, or improvements to capture? Don't wait for session end — capture it now. |
 
 ## Operations
@@ -33,6 +33,7 @@ These are already available as `/command` — no snippet needed:
 | `/new-technique` | Document a new technique in TECHNIQUES.md |
 | `/new-project` | Create a new project from template |
 | `/sync-review` | Process sync inbox + produce outbound packets |
+| `/reflect` | Session-end state persistence + technique review |
 
 ## Systems Thinking
 
@@ -61,6 +62,5 @@ Review:            ccimprove -> surface improvements to what we built
                         |
 After Chunk:       ccstate -> keep CURRENT_STATE.md fresh
                         |
-Session End:       ccsync -> capture generalizable learnings
-                   ccend -> state + learnings + one improvement
+Session End:       ccend -> /reflect (state + sync + techniques + final scan)
 ```
