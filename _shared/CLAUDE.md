@@ -91,11 +91,13 @@ Consolidated behavioral rules with active enforcement mechanisms.
 - State claims (commits, file status): Run the actual command
 - **Dates:** Anchor from the environment `Today's date` field. For long sessions or relative terms ("tomorrow", "next Monday"), run `date` to re-verify. NEVER derive day-of-week mentally — this is a recurring failure mode across sessions. Structurally solve with a SessionStart hook (see Technical Gotchas).
 - File contents: Read the file, don't assume from memory
+- **Source-before-action gate:** When presenting an action plan or batch edit from a source document, Read the full file first — never present from recall
 
 **Violations this prevents:**
 - Surfacing stale state
 - Wrong day-of-week claims ("due today" for tomorrow's items)
 - Giving advice based on pre-action state
+- Presenting action items from a file without reading the current version
 
 ---
 
