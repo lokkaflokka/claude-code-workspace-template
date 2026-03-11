@@ -154,4 +154,3 @@ Anything to capture?
 | `README.md` | Setup guide and philosophy |
 | `SYNC_PROTOCOL.md` | Cross-machine learning sync protocol |
 | `MCP_SETUP.md` | MCP workspace setup guide |
-| `SNIPPETS.md` | Claude Code prompt reference |

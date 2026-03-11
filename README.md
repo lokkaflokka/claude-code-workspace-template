@@ -66,8 +66,8 @@ The template is scaffolding. The value comes from using it. Here's how to bootst
 
 Each session, Claude will read your state and tell you where you left off. As you work:
 
-- **When Claude makes a mistake**, say "Add that to Common Mistakes" — now it won't happen again
-- **When you finish something**, say "Update CURRENT_STATE.md" — now you have continuity
+- **When Claude makes a mistake**, say "Add that to Common Mistakes" with the session number — now it won't happen again, and you can prune old entries that stop recurring
+- **When you finish something**, run `/end` — it persists all state updates using a structured gather-process-emit pattern
 - **When you discover a useful pattern**, consider documenting it in `TECHNIQUES.md`
 
 By session 5, you'll have:
@@ -121,13 +121,13 @@ And here's what a project's Common Mistakes section might look like after real u
 ## Common Mistakes
 
 ### Data Handling
-- **Don't assume prices are current** — Always check the quote date before making comparisons. Quotes typically expire after 30 days. (discovered 2026-01-20: compared a stale quote against fresh ones)
+- **Don't assume prices are current** — Always check the quote date before making comparisons. Quotes typically expire after 30 days. `[S3, 2026-01-20: compared a stale quote against fresh ones]`
 
 ### Recommendations
-- **Don't suggest scheduling without checking the calendar** — Read CURRENT_STATE.md for any blocked dates before proposing timelines. (discovered 2026-02-01: suggested a start date during a planned vacation)
+- **Don't suggest scheduling without checking the calendar** — Read CURRENT_STATE.md for any blocked dates before proposing timelines. `[S5, 2026-02-01: suggested a start date during a planned vacation]`
 ```
 
-The system gets better because it remembers what went wrong.
+The system gets better because it remembers what went wrong. Session numbers enable pruning — if a mistake hasn't recurred in 10+ sessions, it may be safe to remove.
 
 ### The Bootstrapping Mindset
 
@@ -159,7 +159,7 @@ your-workspace/
 └── .claude/
     └── commands/
         ├── consistency-check.md # Registry verification command
-        └── reflect.md           # Session-end state persistence + review
+        └── end.md               # Session-end persistence (gather-process-emit)
 ```
 
 **Two examples included:**
@@ -253,19 +253,17 @@ Keep files focused to avoid "context bloat" — the tax Claude pays reading long
 
 ### Session Closing Ritual
 
-Before ending any session, update state:
+Before ending any session, run `/end`. This skill uses the **Gather-Process-Emit** pattern to batch all reads, reason about what changed, then batch all writes — preventing the interleaved read/write errors that plague manual state updates.
 
-```
-"Update CURRENT_STATE.md with what we worked on today."
-```
+Make this muscle memory. Consistent state updates are what create continuity.
 
-Make this muscle memory. Consistent state updates are what create continuity. Some users create a keyboard shortcut or snippet for this prompt.
-
-**What to capture:**
-- What you focused on
-- What was accomplished
+**What `/end` captures:**
+- What you focused on and what was accomplished
 - Where to pick up next time
-- Any new working memory items (with expiration dates)
+- Common Mistakes discovered (with session number for pruning)
+- Technique applications or discoveries
+- Sync-worthy content for other machines
+- Staleness cleanup (resolved alerts, completed backlog items)
 
 ### What NOT to Put Here (Red List)
 

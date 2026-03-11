@@ -2,6 +2,27 @@
 
 All notable changes to this template.
 
+## [0.6.0] - 2026-03-10
+
+### Added
+- **Gather-Process-Emit (GPE) skill architecture** — New section in `_shared/CLAUDE.md` documenting the phase-separated skill pattern: batch reads → reason with zero tool calls → batch writes. Prevents interleaved read/write errors.
+- **File Staleness targets** — New section in `_shared/CLAUDE.md` with per-file staleness thresholds and overflow actions. CURRENT_STATE.md: 7 days, CLAUDE.md: 30 days, TECHNIQUES.md: 30 days.
+- **Session-attributed Common Mistakes** — All Common Mistakes entries now include session number and date (`[S#, YYYY-MM-DD: what happened]`). Enables pruning: no violation in 10+ sessions = candidate for removal. Updated in both example projects.
+
+### Changed
+- **`/reflect` → `/end`** — Session-end skill renamed and restructured around Gather-Process-Emit phases. Phase A batches all reads, Phase B reasons about updates with zero tool calls, Phase C batches all writes. Replaces the 11-step interleaved checklist.
+- **README updated** — Session closing ritual references `/end` and GPE. Common Mistakes examples show session attribution format. Structure diagram updated.
+- **Principle #1** session-end checklist references `/end` instead of `/reflect`.
+
+### Removed
+- **SNIPPETS.md** — Text expander shortcuts superseded by slash commands. Every snippet was a worse version of an existing skill or CLAUDE.md instruction.
+- **ROADMAP.md** — Internal planning doc with stale future considerations. Not user-facing value.
+
+## [0.5.0] - 2026-02-28
+
+### Added
+- **`/challenge` slash command** — Decision challenge using named personas. Three stakeholder perspectives with specific concerns, not generic archetypes.
+
 ## [0.4.0] - 2026-02-16
 
 ### Added

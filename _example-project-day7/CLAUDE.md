@@ -69,15 +69,17 @@ This is a knowledge base for tracking a kitchen renovation project. It captures 
 
 ## Common Mistakes
 
+*Each entry includes a session number and date. No violation in 10+ sessions = candidate for removal.*
+
 ### Quote Handling
-- **Don't assume quotes are current** — Always check the quote date before making comparisons. Quotes typically expire after 30 days. (discovered 2026-02-03: compared a stale quote against fresh ones, wasted a session)
-- **Don't trust verbal estimates** — If it's not in writing, note it as "verbal, unconfirmed" and get written confirmation before deciding
+- **Don't assume quotes are current** — Always check the quote date before making comparisons. Quotes typically expire after 30 days. `[S3, 2026-02-03: compared a stale quote against fresh ones, wasted a session]`
+- **Don't trust verbal estimates** — If it's not in writing, note it as "verbal, unconfirmed" and get written confirmation before deciding. `[S6, 2026-02-07: gave recommendation based on verbal estimate that turned out $2k higher in writing]`
 
 ### Scheduling
-- **Don't suggest start dates without checking calendar** — Read CURRENT_STATE.md for any blocked dates before proposing timelines. (discovered 2026-02-05: suggested a start date during a planned trip)
+- **Don't suggest start dates without checking calendar** — Read CURRENT_STATE.md for any blocked dates before proposing timelines. `[S5, 2026-02-05: suggested a start date during a planned trip]`
 
 ### Recommendations
-- **Don't recommend contractors without checking references** — At least 2 references should be contacted before final recommendation. Track reference status in the quote file.
+- **Don't recommend contractors without checking references** — At least 2 references should be contacted before final recommendation. Track reference status in the quote file. `[S4, 2026-02-04: recommended a contractor with zero reference checks]`
 
 *Add new mistakes above this line as they're discovered.*
 

@@ -103,19 +103,19 @@ What would you like to focus on?
 
 ## Common Mistakes
 
-*Capture errors Claude has made in this project so they don't recur.*
+*Capture errors Claude has made in this project so they don't recur. Each entry includes a session number and date — this enables pruning (no violation in 10+ sessions = candidate for removal).*
 
 ### [Category]
-- **Don't [mistake]** — [Why and what to do instead]
+- **Don't [mistake]** — [Why and what to do instead] `[S#, YYYY-MM-DD: what happened]`
 
 **Example:**
 
 ### Data Handling
-- **Don't assume data is current** — Always check the as-of date before making recommendations
-- **Don't overwrite historical files** — Create new dated versions instead
+- **Don't assume data is current** — Always check the as-of date before making recommendations. `[S3, 2026-02-03: compared a stale quote against fresh ones]`
+- **Don't overwrite historical files** — Create new dated versions instead. `[S5, 2026-02-05: overwrote a snapshot instead of creating a new one]`
 
 ### Recommendations
-- **Don't suggest actions without checking constraints** — Read CURRENT_STATE.md for any blockers first
+- **Don't suggest actions without checking constraints** — Read CURRENT_STATE.md for any blockers first. `[S4, 2026-02-04: suggested a start date during a planned trip]`
 
 *Add new mistakes above this line as they're discovered.*
 

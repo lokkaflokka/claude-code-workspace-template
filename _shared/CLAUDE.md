@@ -69,10 +69,10 @@ Consolidated behavioral rules with active enforcement mechanisms.
 - If no: persist before moving on.
 
 **Session-end checklist** (verify before closing out):
-- [ ] **Run `/reflect`** — handles all session-end work: state file updates, vault-first check, action-reminder pairing, sync capture, decay check, backlog sync, technique/pattern review, session log. Full protocol in the skill file.
+- [ ] **Run `/end`** — handles all session-end work using the Gather-Process-Emit pattern: batch reads → reason about updates → batch writes. Full protocol in the skill file.
 - [ ] **Verify nothing was missed** — quick gut check: any work discussed but not persisted in files?
 
-**Why a skill?** Session-end checklists in CLAUDE.md get compressed or skipped under context pressure. A skill can't be compressed away — invoking `/reflect` loads the full protocol every time. See `_shared/TECHNIQUES.md` → Structural Enforcement for the general principle.
+**Why a skill?** Session-end checklists in CLAUDE.md get compressed or skipped under context pressure. A skill can't be compressed away — invoking `/end` loads the full protocol every time. See `_shared/TECHNIQUES.md` → Structural Enforcement for the general principle.
 
 **Violations this prevents:**
 - Designs discussed but not documented
@@ -192,6 +192,38 @@ Test: Can future-you act on this without re-researching?
 - Reminders referencing vault files that don't contain the content
 - Completing a reminder without creating the next one in the chain
 - Orphaned state file actions with no corresponding reminder
+
+---
+
+## Skill Architecture: Gather-Process-Emit
+
+All multi-step skills (especially `/end`) follow the **Gather-Process-Emit** pattern:
+
+1. **Gather** — Batch all reads into a single parallel tool call. Load everything you'll need.
+2. **Process** — Reason about what needs to happen. **Zero tool calls** in this phase. All data was loaded in Gather.
+3. **Emit** — Batch all writes. Execute the plan from Process.
+
+**Why this matters:** Without phase separation, reads and writes interleave. This causes stale reads (you read file A, write file B, then make decisions about A using pre-B state), missed updates, and forgotten persistence. The pattern is simple but the discipline prevents a class of errors that documentation alone doesn't catch.
+
+**When to apply:** Any skill or workflow that reads state, makes decisions, and writes updates. The `/end` skill enforces this structurally. Apply to custom skills as you build them.
+
+---
+
+## File Staleness
+
+Files that aren't updated become misleading. Stale context is worse than no context — it causes confident wrong answers.
+
+**Staleness targets:**
+
+| File | Threshold | What to Do When Stale |
+|------|-----------|----------------------|
+| `CURRENT_STATE.md` | 7 days | Update Last Session + Active Work Streams |
+| `CLAUDE.md` (per project) | 30 days | Review Common Mistakes, Key Files, routing |
+| `TECHNIQUES.md` | 30 days | Check for unevaluated techniques |
+
+**Enforcement:** `/consistency-check` flags files past their staleness threshold. The `/end` skill updates CURRENT_STATE.md every session, which naturally prevents staleness for the most critical file.
+
+**Common Mistakes entries** include session numbers. If a mistake hasn't been violated in 10+ sessions, it's a candidate for removal — the behavior may be learned or the context may have changed.
 
 ---
 
