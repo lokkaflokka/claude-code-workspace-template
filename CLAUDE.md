@@ -50,70 +50,32 @@ Translate once, then ask Claude for the general solution. For structured handoff
 
 ---
 
-## Session Initialization Protocol
+## Session Initialization
 
-**MANDATORY on every new session at this level — no exceptions, even if the user's first message is an explicit action request or plan.**
+`/start` runs every session. **Non-negotiable**, even when the user opens with an action request or plan. The user opening with "implement this plan" or "do X" does NOT skip initialization. Run `/start`, present the summary, THEN proceed to the user's request.
 
-The user opening with "implement this plan" or "do X" does NOT skip initialization. Run init first, present the summary, THEN proceed to the user's request. Reminders due today are often directly relevant to the work being requested. Skipping init means missing this context.
+Reminders due today are often directly relevant to the work being requested. Skipping init means missing this context.
 
-**Steps 1-4 — run ALL in parallel (single tool call batch):**
+See `.claude/commands/start.md` for the full protocol (Phase A gather → Phase B process+output → Phase C interactive triage).
 
-1. **Read `_shared/CURRENT_STATE.md`** — Meta-level dashboard (context for session, not reported directly)
-2. **Read `_shared/INBOX.md`** (if it exists) — Capture staging area for unrouted items.
-3. **Check reminders/deadlines** — Whatever reminder system you use.
-4. **Check sync inbox** — Glob `_shared/sync/inbox/*.md`.
+**Output format — exception-only:** sections only appear if actionable. No "all clear" lines. Hard cap: 8 lines (excluding capture prompt). Full design rationale in `_shared/TRACKING_SYSTEM_DESIGN.md` → Today Plan.
 
-**After parallel batch completes, process results:**
+## Custom Skills
 
-- **Capture staging (step 2):** Also ask: "Anything to capture since last session?" — the user may have items from any source.
-- **Reminders (step 3):**
-   - **Anchor today's date first** from the environment `Today's date` field — all "due in X days" calculations MUST use this. Do not infer or assume the date.
-   - **Recommended list architecture** (3 lists): (1) items needing session context, (2) offline/personal tasks, (3) quick capture inbox. Triage inbox items each session.
-   - **Upcoming deadlines:** Surface open items due within 7 days from your "needs session context" list.
-   - **Due today/tomorrow:** Surface non-recurring items due today/tomorrow from your "offline tasks" list (skip recurring habits/errands).
-   - **Completed item processing:** Scan for items completed since last session. Cross-reference against CURRENT_STATE.md — if the outcome is already reflected in state files, skip silently. If not reflected, surface and ask for details. Skip obvious recurring habits.
-- **Sync inbox (step 4):** If packets exist, surface: "📨 N sync packets pending in inbox." Process with `/sync-review`. Omit if empty.
+Skills live in `.claude/commands/`. See `_shared/SKILL_INDEX.md` for the full inventory + evaluation framework. Quick reference for the lifecycle skills:
 
-**Steps 5-6 — sequential, after data is loaded:**
-
-5. **Clarify if intent seems project-specific** — If the request clearly belongs to one project, ask which before diving in.
-6. **Otherwise, recognize meta-level patterns:**
-   - "New technique" → Document in `_shared/TECHNIQUES.md`, evaluate, log
-   - "Cross-project work" → Identify which projects are involved
-   - "New project setup" → Create from `_example-project/` template
-
-**Output format — exception-only:**
-
-The init readout only surfaces things that need attention. If a category has nothing actionable, it doesn't appear. No "all clear" lines.
-
-- **INBOX:** Only mention if unrouted items exist.
-- **Sync inbox:** Show if packets exist in `_shared/sync/inbox/`. 📨 marker. Omit if empty.
-- **Reminders:** Show items due within 7 days. 🔴 ≤1 day, ⏳ 2-3 days, • 4-7 days. Omit section if nothing due.
-- **Today:** Non-recurring items due today/tomorrow. 📋 marker. Omit if none.
-- **Completed since last session:** Only show completions not yet reflected in state files. Omit if all are already reflected.
-- **ALERTS from CURRENT_STATE.md:** Exception-only — only surface actionable alerts. Clean categories don't appear.
-- **Last session:** Always show — one line with focus and what was left off.
-- **Capture prompt:** Always end with "Anything to capture since last session?"
-
-**NOT included in init** (available separately):
-- **Consistency checks** → run `/consistency-check`
-- These run at their own cadence, not every session.
-
-**Example — typical session (some things need attention):**
-```
-🔴 Feb 4: Submit expense report
-⏳ Feb 7: Review quarterly goals
-📋 Today: Pick up prescription
-
-🔄 Last session (Feb 3): Travel automation. Left off: booking flow.
-Anything to capture?
-```
-
-**Example — nothing urgent:**
-```
-🔄 Last session (Feb 3): Documented 2 techniques, evaluated 1.
-Anything to capture?
-```
+| Skill | When to invoke |
+|-------|---------------|
+| `/start` | Every session |
+| `/end` | Every session |
+| `/capture` | User shares content (URL, screenshot, text, PDF) |
+| `/check` | Biweekly system health pass |
+| `/sync-review` | When `/start` surfaces pending sync packets |
+| `/meeting-notes` | Post-meeting extraction |
+| `/challenge` | Decision with stakes |
+| `/route` | Post-synthesis batch routing |
+| `/revisit` | Position review dates due |
+| `/new-project` | Setting up a new vault |
 
 ## Query Routing
 
@@ -125,20 +87,23 @@ Anything to capture?
 | "What projects exist?" | `_shared/PROJECTS.md` | List registry |
 | "Work on [specific project]" | `[project]/CLAUDE.md` | Switch context to project |
 | "Cross-project task" | Depends | Identify involved projects first |
+| "Where do principles live?" | `_shared/PRINCIPLES_REFERENCE.md` | Full enforcement detail |
+| "Where do skills live?" | `_shared/SKILL_INDEX.md` | Skill inventory + evaluation |
 
 ## What NOT to Do at This Level
 
 - **Don't dive into a specific project without asking** — If the user meant to work in `finance/`, they would have started there
 - **Don't assume project-specific context** — Work at this level is meta/organizational
-- **Don't skip the state check** — Always read `CURRENT_STATE.md` first
+- **Don't skip the state check** — `/start` always reads `CURRENT_STATE.md` first
 
 ## Directory Reference
 
 | Directory | Purpose |
 |-----------|---------|
-| `_shared/` | Cross-project techniques, evaluations, meta-level state |
+| `_shared/` | Cross-project techniques, evaluations, design specs, meta-level state |
 | `_example-project/` | Template for new projects (copy and customize) |
-| `.claude/commands/` | Reusable slash commands |
+| `.claude/commands/` | Custom skills (slash commands) |
+| `templates/` | Reusable templates (handoff format, evidence log, etc.) |
 
 *Add your actual projects to this table as you create them.*
 
@@ -146,11 +111,21 @@ Anything to capture?
 
 | File | Purpose |
 |------|---------|
-| `CLAUDE.md` | This file — top-level session initialization |
+| `CLAUDE.md` | This file — top-level session initialization, LLM lane policy, query routing |
+| `_shared/CLAUDE.md` | Cross-project principles (concise) + workflow architecture |
 | `_shared/CURRENT_STATE.md` | Meta-level dashboard with alerts |
 | `_shared/INBOX.md` | Capture staging area (unrouted items) |
-| `_shared/TECHNIQUES.md` | Pattern catalog |
 | `_shared/PROJECTS.md` | Project registry |
+| `_shared/TECHNIQUES.md` | Pattern catalog |
+| `_shared/PRINCIPLES_REFERENCE.md` | Full enforcement detail for the 8 principles |
+| `_shared/TECHNICAL_GOTCHAS.md` | Factual reminders about tools and environment |
+| `_shared/SKILL_INDEX.md` | Skill inventory + evaluation framework |
+| `_shared/TRACKING_SYSTEM_DESIGN.md` | Lists, zones, body tags, completion algorithm |
+| `_shared/SIGNAL_CAPTURE_PATTERN.md` | Capture pipeline (5-stage) |
+| `_shared/SILENT_FAILURE_SAFEGUARDS.md` | M1-M4 framework |
+| `_shared/LEARNING_SYSTEM_DESIGN.md` | Synthesizer/Advisor/Reflector/Challenger protocols |
+| `_shared/PROACTIVITY_DESIGN.md` | Push-based proactive behaviors |
+| `_shared/SYSTEM_ROADMAP.md` | Platform-level roadmap |
 | `README.md` | Setup guide and philosophy |
 | `SYNC_PROTOCOL.md` | Cross-machine learning sync protocol |
 | `MCP_SETUP.md` | MCP workspace setup guide |

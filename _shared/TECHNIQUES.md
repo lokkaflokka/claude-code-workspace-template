@@ -15,35 +15,53 @@ A living catalog of patterns and techniques discovered across projects.
 
 ## How to Use This File
 
+### Routing Gate (mandatory before adding to this file)
+
+Before adding any technique entry, answer in order:
+
+1. **Who consumes this?** Name the specific skill files, gotcha entries, or `CLAUDE.md` sections where the rule would actually fire at a decision point. If you can't name at least one, the technique is not yet actionable — defer.
+2. **How many distinct consumers?**
+   - **Exactly one consumer** → inline into that consumer file. Do NOT add here.
+   - **Two or more consumers across different skills/contexts** → registry entry here is justified.
+3. **Has it been applied?** If the `Applied:` line would read "Not yet applied," either apply it now (inline at the consumer) or defer the entry until first use. A registry of unapplied techniques calcifies into defensive bloat.
+
+A registry-justified technique gets its own `### ` heading with a `<!-- T-NNN -->` comment for stable cross-referencing. See `_shared/LEARNING_SYSTEM_DESIGN.md` → Data Model for the full ID scheme.
+
 ### Adding a Technique
 
 ```markdown
-## [Technique Name]
+### [Technique Name]
+<!-- T-NNN -->
 
 **Type:** Project | Workflow
 **Origin:** [Where you learned it — project, person, article, etc.]
 **Added:** YYYY-MM-DD
 
-### What it is
+#### What it is
 [Brief description]
 
-### Why it works
+#### Why it works
 [Key mechanics — what makes this effective]
 
-### Example
+#### Example
 [Concrete example of the technique in action]
 
-### When to use
+#### When to use
 [Situations where this technique applies]
 
-### When NOT to use
+#### When NOT to use
 [Situations where this technique is overkill or counterproductive]
+
+**Applied:** [vault names + dates as it's adopted]
+**Effectiveness:** [qualitative assessment — added/updated by Reflector]
+**Connects to:** [cross-references to related T-NNN, I-NNN, P-NNN, TH-NNN]
 ```
 
 ### After Adding
 
 - **Project techniques:** Evaluate relevance across all projects, log in `EVALUATION_LOG.md`
 - **Workflow techniques:** Note installation/setup steps; no per-project evaluation needed
+- **Effectiveness tracking:** When the technique is applied, the Reflector protocol updates the `Effectiveness:` field with qualitative assessment. See `LEARNING_SYSTEM_DESIGN.md` for the protocol.
 
 ---
 

@@ -68,4 +68,14 @@ This keeps the registry as the single source of truth.
 
 ---
 
+## Cross-References
+
+| Document | Relationship |
+|----------|--------------|
+| `SYSTEM_ROADMAP.md` | Platform-level roadmap and active phase tracking |
+| `ARCHITECTURE.md` (if maintained) | System overview and component boundaries |
+| `SYNC_PROTOCOL.md` | Cross-machine learning sync setup |
+
+---
+
 *Last updated: YYYY-MM-DD*

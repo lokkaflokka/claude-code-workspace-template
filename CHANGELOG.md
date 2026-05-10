@@ -2,6 +2,50 @@
 
 All notable changes to this template.
 
+## [0.7.0] - 2026-05-10
+
+Major release. Substantially expanded skill suite, six new design docs, and a refreshed `_shared/CLAUDE.md` that lazy-loads enforcement detail and gotchas to keep the always-loaded CLAUDE.md hierarchy under reinjection thresholds.
+
+### Added — Skills
+
+- **`/start`** — Full session-init protocol. Phases A (parallel gather → cache JSON) → B (process + zone-based Today Plan output, capacity signal, exception-only) → C (interactive triage). Mode tokens (`quick`, `system`, `today`), vault aliases, activity tokens (`triage`, `plan`, `prep`, etc.), `then` free-text continuation. Hard 8-line cap on output. `/start system` adds Phase D system audit.
+- **`/check`** — System health check. 16 mechanical + semantic checks (registry drift, version sync, tag drift, file-surface health with three-tier thresholds, recurrence tag audit, sensitive-data boundary scan, entity fragmentation, gap detection, etc.). `/check merge-pending` runs only the pending-merge step.
+- **`/capture`** — Signal triage and routing. 7-type triage taxonomy (Information, Action, Roadmap, Technique, Content, Backlog, Discard), routing-confidence assessment (auto-route vs human-review), batch mode with source grouping, mixed-content orchestration that delegates meeting content to `/meeting-notes`.
+- **`/route`** — Batch execution of staged synthesis proposals. 5-phase protocol (load → approve → execute deterministic → execute judgment → complete) with visible-output approval gate. Handles theme updates, learning log writes, technique candidates, vault routing, new themes, demotions.
+- **`/revisit`** — Position review with spaced repetition. Evidence chain presentation, confirmation-bias scan, position evolution options (strengthen / update / retire / split / no change), interval doubling on strengthen, reset-to-30d on contradictory evidence. Integrates with `/start` (review-date check) and `/end` (cache update).
+- **`/meeting-notes`** — Post-meeting structured extraction. Meeting context gather, four-section template (decisions / actions / insights / OQs), strategic synthesis pass (5 questions), routing-preview hard gate, tiered routing (Tier 0 session memory → Tier 1 targeted read → Tier 1b project vaults → Tier 2 append-only with Pending Merge).
+
+### Changed — Skills
+
+- **`/end`** — Expanded from 4-step framework to 5-phase Gather-Process-Emit + verification. Phase 0 (Session Scan, no tools) added as an explicit input list — process failures, verification misses, techniques applied, generalizable patterns, novel insights, position reviews, value moment. Phase 1 batches all reads in parallel. Phase 2 splits writes across two turns to maintain edit quality. Phase 3 verification adds unconditional repo hygiene scan + conditional vault-first / action-reminder pairing / waiting-on / cross-reference checks. Phase 3.5 (optional Plan Tomorrow). Phase 4 mandatory sync-worthiness gate before drafting packets.
+- **`/sync-review`** — Adds the **Disposition Gate** (mandatory per-item table before archive — actions must be Edit/Task/Note/Deferred, no generic "noted/applicable/already covered" labels) and the **Routing Gate** for technique candidates (one consumer → inline into that file; two+ → registry entry justified). Optional mechanical-enforcement note for PreToolUse hook on `TECHNIQUES.md`.
+
+### Added — Design Docs (`_shared/`)
+
+- **`PRINCIPLES_REFERENCE.md`** — Full enforcement detail for the 8 Core Principles (concise forms remain in `_shared/CLAUDE.md`). Includes tool-before-question gate, source-before-action gate, mechanical-fix-first tier sequence (Tier 1 code/schema/hook → Tier 2 doc rule at consumer surface → Tier 3 behavioral last resort), cross-vault awareness sub-rule, first-use destructive-operation gate, sensitive-domain wall, public-repo pre-commit checklist.
+- **`TECHNICAL_GOTCHAS.md`** — Curated factual reminders. Extracted from `_shared/CLAUDE.md` for size management — keeps the always-loaded CLAUDE.md hierarchy small while preserving the gotcha catalog. Covers Claude Code hooks, CLAUDE.md reinjection cost, background agents (`claude -p`), tool result reliability, WebFetch failures, JS-rendered portals, macOS launchd + unsigned `.app` bundles, bash idioms, AppleScript, reminders/task systems, MCP development, Obsidian race conditions, terminal input truncation, more.
+- **`TRACKING_SYSTEM_DESIGN.md`** — Three-list architecture (Strategic / Personal / Inbox) + zone-based planning (Deep Work / Movement / Admin) + Today Plan output format with 8-line cap + completion processing algorithm + body-tag conventions (`[recur:]`, `[waiting-on:]`, `[ref:]`) + cross-vault entity references + phase-based checklist convention. Task-system-agnostic; includes a "Tooling Note" describing reference-implementation properties (single tool for reads/writes, list-scoped operations, `--dry-run`, verify-after-save, JSON output with `completionDate`).
+- **`SIGNAL_CAPTURE_PATTERN.md`** — 5-stage capture pipeline (capture / triage / enrich / route / retrieve), triage taxonomy, INBOX.md staging format with metadata schema, routing confidence (auto-route vs human-review), capture surfaces (assistant session, Slack, email, meeting notes, web links, mobile), implementation playbooks (Playbook A full assistant / Playbook B constrained / Playbook C hybrid), cross-context flows.
+- **`SILENT_FAILURE_SAFEGUARDS.md`** — M1-M4 framework for catching failures that report success but didn't actually do the work. M1 Precondition Gate, M2 Verification Window, M3 Contradiction Alert, M4 Source-Coverage Gate. Five anonymized example instances + mechanism × instance matrix + adoption-order guidance.
+- **`SKILL_INDEX.md`** — Skill inventory + evaluation framework. Two-tier structure (Core/structural + Common/specialized), routing table (when to invoke), skill boundaries (owns vs. doesn't own), native Claude Code (no custom skill needed), evaluation framework (collection / contrast / synthesis), skill candidates section, two-tier-reality concept.
+- **`LEARNING_SYSTEM_DESIGN.md`** — Knowledge architecture for compounding insights. Stable IDs (T-NNN, I-NNN, P-NNN, TH-NNN), enhanced markdown entries with cross-references, dual-loop architecture (global outer: Synthesizer + Challenger; vault-scoped inner: Advisor + Reflector), staged-routing model, vault learning context (`_learning_context` block), spaced-repetition position review, 3 feedback loops. Phased rollout from foundation through Challenger.
+- **`PROACTIVITY_DESIGN.md`** — Push-based proactive behaviors design. Always-on execution platform pattern, single-layer (assistant-powered) vs two-layer rejection, shared push utility, four behaviors (B1 daily briefing, B2 digest completion notification, B3 heartbeat monitor, B4 cost monitoring), surface interaction model (glance / reply / session), security considerations ("permission hungry" framing), phased implementation, cost controls, success criteria.
+- **`SYSTEM_ROADMAP.md`** — Roadmap skeleton (template the user fills in) covering completed phases / product-pass arsenal / current phase / future phases / tier-based sequencing / opportunistic backlog / changelog.
+
+### Changed — Existing Files
+
+- **Root `CLAUDE.md`** — Refreshed Session Initialization section to point at `.claude/commands/start.md` for the full protocol. Added a Custom Skills quick-reference table with all 10 lifecycle skills. Expanded Query Routing table with PRINCIPLES_REFERENCE / SKILL_INDEX entries. Expanded Key Files table to cover the new design docs.
+- **`_shared/CLAUDE.md`** — Added Principle #8 (Content Shared Is Content Captured). Tightened Principles 1-7 with new sub-rules (state-file composition, tool-before-question gate, mechanical-fix-first, cross-vault awareness, first-use destructive-operation gate, credential rule, `[ref:]` tags). Replaced inline Technical Gotchas section with a pointer to `TECHNICAL_GOTCHAS.md` (significantly reduces always-loaded CLAUDE.md weight). Replaced inline Session Initialization Protocol with a pointer to `.claude/commands/start.md`. Added cross-references to the new design docs in Purpose & References.
+- **`_shared/PROJECTS.md`** — Added Cross-References section (`SYSTEM_ROADMAP.md`, `ARCHITECTURE.md`, `SYNC_PROTOCOL.md`).
+- **`_shared/TECHNIQUES.md`** — Added Routing Gate (mandatory before adding new entries: name consumers, count them, defer if not yet applied) and `<!-- T-NNN -->` ID scheme, with new `Applied:` / `Effectiveness:` / `Connects to:` fields per entry. Existing technique entries unchanged.
+
+### Conventions Added
+
+- **Stable IDs** for techniques (`T-NNN`), insights (`I-NNN`), positions (`P-NNN`), and themes (`TH-NNN`). Permanent — never reused, never reassigned. Removed entries get a tombstone (`Status: Archived` or `Status: Superseded by T-045`).
+- **Body tags** for task-system reminders: `[recur: N days]` / `[recur: +N days]` / `[recur: stop]` for completion-based recurrence, `[waiting-on:]` + `[waiting-since:]` for blocked items, `[ref: vault/path/FILE.md]` for cross-vault entity references.
+- **Routing Gate** — applied to both `/sync-review` and `_shared/TECHNIQUES.md` editing. Prevents the registry from calcifying with unapplied techniques.
+- **Mechanical-fix-first principle** — when a process failure surfaces, default to a Tier 1 (code/schema/hook) or Tier 2 (doc rule at consumer surface) fix. Tier 3 (behavioral-only "remember to...") is last-resort and must name what would make it Tier 1/2.
+
 ## [0.6.0] - 2026-03-10
 
 ### Added
