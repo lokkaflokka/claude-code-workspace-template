@@ -199,6 +199,39 @@ Otherwise:
 
 ---
 
+### Phase 5 — Post-/end addendum (when work continues after close)
+
+`/end` is a checkpoint, not a hard close. Real sessions often continue with user-directed follow-ups (commit + tag + push, security patches, late fixes, "while we're at it" cleanups). Without explicit handling, this work accumulates untracked and gets lost between sessions.
+
+**Trigger** — any of the following after Phase 4 close:
+- A new git commit in a tracked repo
+- A new tag pushed
+- Substantive Edit/Write work on shared files, vault, or skill files (≥3 edits OR any single edit ≥50 lines)
+- User-directed multi-step operations (deploy, audit-fix, migration)
+
+**Don't trigger on:** read-only exploration, conversation, single small edits to in-progress work tracked elsewhere, or operations that have their own state surface (`/digest`, `/route`, etc. each persist independently).
+
+**Persistence shape** — append a `**Post-/end addendum (S<NNN>, <N> turns past /end Phase 4 close):**` block to the existing Last Session section in the state file. Do NOT create a new Last Session block — that would orphan the original /end output. The addendum block sits under "Completions processed through" and includes:
+
+- Brief framing sentence (when the addendum work started, what triggered it)
+- Per-item: 1-2 sentences capturing what landed, commits referenced by short SHA, packages/versions touched
+- `**Post-/end Files touched:**` bullet list (paths + short SHAs)
+- `**Post-/end generalizable patterns:**` bullet list (sync-worthy patterns, gotcha candidates)
+- `**Post-/end discipline note:**` (optional) — if the addendum surfaces a recurring shape worth codifying
+
+**Also update Left off:** mark closed items with `✅ S<NNN> post-/end` framing. If new follow-ups emerged, add to Left off as fresh `[ ]` entries.
+
+**When to invoke:**
+- User says "we're past /end" or "don't lose track of this stuff" — explicit
+- Agent recognizes trigger conditions hit ≥3 turns past Phase 4 — proactive surface to user ("we've landed [N items] since /end — capture as Post-/end addendum?")
+- Before any subsequent `/start` (the natural next-session checkpoint)
+
+**Edit-quality rules** (same as Phase 2): no re-read after Edit unless old_string fails; copy verbatim when moving content; any redaction gates active for Phase 2 apply to addendum content just as to Last Session.
+
+**Cross-session lifecycle:** Post-/end addendums from previous sessions get integrated into the main Last Session prose during the next session's Phase 2 Turn 1 rewrite — the addendum is a working surface, not a permanent structure. If the next session also accumulates a post-/end addendum, append fresh; the prior addendum has already been folded.
+
+---
+
 ## Rules
 
 - Execute all phases every session. The skill exists to prevent compression/skipping.
