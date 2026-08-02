@@ -117,7 +117,7 @@ Skills live in `.claude/commands/`. See `_shared/SKILL_INDEX.md` for the full in
 | `_shared/INBOX.md` | Capture staging area (unrouted items) |
 | `_shared/PROJECTS.md` | Project registry |
 | `_shared/TECHNIQUES.md` | Pattern catalog |
-| `_shared/PRINCIPLES_REFERENCE.md` | Full enforcement detail for the 8 principles |
+| `_shared/PRINCIPLES_REFERENCE.md` | Full enforcement detail for the 10 principles |
 | `_shared/TECHNICAL_GOTCHAS.md` | Factual reminders about tools and environment |
 | `_shared/SKILL_INDEX.md` | Skill inventory + evaluation framework |
 | `_shared/TRACKING_SYSTEM_DESIGN.md` | Lists, zones, body tags, completion algorithm |

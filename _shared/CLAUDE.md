@@ -3,7 +3,7 @@
 ```yaml
 _context:
   tier: 1  # Root of inheritance hierarchy
-  version: 2.1
+  version: 2.2
   last_updated: YYYY-MM-DD
   inherits_from: []
   techniques_applied:
@@ -54,33 +54,41 @@ This prevents the "list → read → filter → repeat" loop that burns tokens o
 
 ## Core Principles (Enforced)
 
-**The meta-rule:** Documentation without enforcement is aspirational. Each principle has a verification step. Full enforcement detail with violation history: `PRINCIPLES_REFERENCE.md`.
+**The meta-rule:** documentation without enforcement is aspirational. Every principle names a verification step. Full enforcement detail and violation history: `PRINCIPLES_REFERENCE.md`.
 
-*Customize these principles for your workflow. The structure (principle + enforcement + violations prevented) is the pattern; the specific rules are yours to define.*
+*Customize these for your workflow. The structure (operative rule + enforcement surface + pointer to detail) is the pattern; the specific rules are yours to define.*
+
+**House style, operative-rules-only.** Each block states what to DO, in the imperative, and points at the reference file for reasoning and history. Rationale, war stories, and superseded wording live in `PRINCIPLES_REFERENCE.md` or an archive file, never here. This file is loaded into every session, so prose that has stopped changing behavior is costing tokens on every turn. Compress on that test, not on length.
 
 ### 1. Files Are The Work Product
-Knowledge lives in files, not conversation. Before declaring done: verify artifacts exist in files. Run `/end` at session close for all persistence. Edit discipline: when moving content between files, copy verbatim — only change structural references. **State-file composition rule:** `CURRENT_STATE.md` Active Contexts and `INBOX.md` are read every session — compose entries as ≤2-sentence pointers; route detail to domain-specific files.
+Knowledge lives in files, not conversation. Before declaring done: verify the artifacts exist in files. Run `/end` at session close for all persistence. Moving content between files means copy verbatim, changing only structural references. **State-file composition:** entries in always-read files (`CURRENT_STATE.md` Active Contexts, `INBOX.md`) are pointers of two sentences or fewer; detail routes to domain files.
 
 ### 2. Verify, Don't Assume
-Verify claims with commands, not memory. Today's date from SessionStart hook — never derive mentally. User corrections override state files. **Tool-before-question gate:** before asking a factual question, check if a tool can answer it (vault files, reminders, email, code, calendar). **Source-before-action gate:** Read the full source file before presenting action plans from it. **Mechanical-fix-first:** when a process failure surfaces, default to a structural fix (script edit, hook, file rule) before a behavioral note.
+Verify claims with commands, not memory. Today's date comes from the SessionStart hook, never derived mentally. User corrections override state files. **Tool-before-question:** never ask the user a factual question a tool can answer. **Mechanical-fix-first:** a surfaced process failure gets a structural fix (script, hook, file rule) before a behavioral note. **Recurrence escalation:** the same gate-class failing twice inside 48 hours requires a mechanical fix at a named surface; a second occurrence never closes as a discipline insight. Detail: `PRINCIPLES_REFERENCE.md` Principle 2.
 
 ### 3. Understand Before Acting
-Read context before producing artifacts. `/start` runs every session — non-negotiable, even for action requests. Check `CLAUDE.md`, `CURRENT_STATE.md`, understand architecture. Multi-repo: map dependency graph before writing the first file. **Cross-vault awareness:** when reading a vault file that mentions a person/event/decision tracked elsewhere, grep that entity across session context before responding. **First-use gate for destructive operations:** when a tool/skill/workflow step mutates external state (Gmail, APIs, databases) and has never been validated end-to-end on production data, require a planning gate before batching.
+Read context before producing artifacts. `/start` runs every session, non-negotiable, even when the user opens with an action request. Check `CLAUDE.md` and `CURRENT_STATE.md`; multi-repo work maps the dependency graph first. **Cross-vault awareness:** an entity mentioned in one vault but tracked in another gets grepped and presented as connected. **First-use gate:** a step that mutates external state (mail, APIs, databases) and has never run end-to-end on real data requires a planning gate before batching.
 
 ### 4. Apply Before Inventing
-Search `TECHNIQUES.md` and existing vaults before designing new patterns. Only invent if nothing existing applies.
+Search `TECHNIQUES.md` and existing vaults for a proven structure before designing a new pattern. Invent only when nothing applies.
 
 ### 5. Boundaries Are Sacred
-Code in distributable repos, data in vaults, config in dotfiles. **Structured stores (SQLite, etc.) → `~/.config/`** even for personal data — cloud sync corrupts live SQLite writes. **Sensitive-domain content (PHI, finance, work/PII) is vault-only** — never in `_shared/` files (use generic references + pointers), reminder bodies, git, or conversation as storage. **Credentials never in cloud-synced directories** — use `~/.config/` or env vars; `.gitignore` does NOT protect from cloud sync. **Public repo commits:** no real paths, no private repo links, no work emails in git author. Full enforcement: `PRINCIPLES_REFERENCE.md`.
+Code in distributable repos, data in vaults, config in dotfiles. **Structured stores (SQLite and similar) belong in a config directory**, never a cloud-synced tree: sync corrupts live SQLite writes. **Sensitive-domain content (PHI, finance, work PII) is vault-only for WRITES**, never `_shared/`, git, or any durable shared artifact. **RENDER is a separate axis from WRITE.** Decide separately who may read a body, on which surface, and price each fence on its own evidence. A policy sentence of the form "never A, B, C, or D" is usually more than one rule, and the weaker half will inherit the stronger half's absoluteness unless you split them. **Credentials never in cloud-synced directories**; `.gitignore` does not protect against cloud sync. **Public repo commits:** no real paths, private repo links, or work emails. Detail: `PRINCIPLES_REFERENCE.md` Principle 5.
 
 ### 6. Sync Is Immediate
-Related updates happen same-session. After package/vault changes: registry, versions, orchestrator, build, tags, version propagation, distribution. MCP servers MUST go through a central toolkit-hub package — never standalone. Pre-archive: upstream all content before marking EOL.
+Related updates happen in the same session: registry, versions, orchestrator, build, tags, propagation, distribution. MCP servers MUST route through a central toolkit-hub package, never standalone. Pre-archive: upstream all content before marking EOL.
 
 ### 7. Future Self Can Act Immediately
-Every reminder: what/how/context. Correct list (Strategic = needs assistant, Personal = offline, Inbox = capture). Successor reminders before completing. Vault-first: file content before creating reminder. Action-reminder pairing: every state-file action needs a paired reminder. **`[ref:]` tags** on vault-linked reminders make the poke→context link explicit and grep-able.
+Every reminder carries what, how, and context, on the correct list (Strategic = needs the assistant, Personal = offline, Inbox = capture). Write successor reminders before completing the parent. Vault-first: file content before creating the reminder. Pair every state-file action with a reminder. **`[ref:]` tags** make the poke-to-context link explicit and grep-able. **Body-sufficiency:** the item carries its execution payload in the body, and inside whatever character budget the reading surface actually renders. A body that is sufficient in principle but truncated on the phone is not sufficient.
 
 ### 8. Content Shared Is Content Captured
-User shares content → process immediate need → route to digest pipeline (`save_for_later` or equivalent). No confirmation gate. Fetch failure doesn't block routing — save URL + available context. Both prep artifact and digest routing coexist.
+User shares content, so process the immediate need and route it to the digest pipeline (`save_for_later` or equivalent) with no confirmation gate. A fetch failure does not block routing: save the URL plus whatever context you have. Prep artifact and digest routing coexist.
+
+### 9. Entity-of-Record Discipline
+For each tracked entity (account, person, decision, credential), exactly one system holds the truth; every other mention references it and never duplicates it. **Before creating a second record, ask whether the first should move instead.** Credential rotation includes "find and replace every referencing site" as an atomic step, not a follow-up. **Owned-fix guard:** when a failure class already has an owned fix, new observations route to the owning record, never into a new record, a new rule, or a re-attempted fix. Detail: `PRINCIPLES_REFERENCE.md` Principle 9.
+
+### 10. Source Before Action
+Before producing any plan, breakdown, sizing, recommendation, or state-mutating action about a tracked item (a reminder body, an active spec, a referenced vault file), **read the underlying source first**. Acting from a title or a one-line summary is the highest-recurrence anti-pattern this system has recorded, which is why it is stated as its own principle rather than folded into Principle 3. Behavioral re-enforcement has repeatedly proven insufficient: enforce it mechanically at every surface that can act on a title alone. Detail: `PRINCIPLES_REFERENCE.md` Principle 10.
 
 ---
 

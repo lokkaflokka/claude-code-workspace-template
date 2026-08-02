@@ -144,22 +144,49 @@ The structure is immediate. The value compounds.
 ```
 your-workspace/
 ├── CLAUDE.md                    # Top-level session initialization
+├── MCP_SETUP.md                 # MCP server setup guide
+├── SYNC_PROTOCOL.md             # Cross-machine sync protocol
 ├── _shared/
-│   ├── CLAUDE.md                # Cross-project workflows
+│   ├── CLAUDE.md                # Cross-project workflows + the 10 Core Principles
+│   ├── PRINCIPLES_REFERENCE.md  # Full enforcement detail per principle
 │   ├── CURRENT_STATE.md         # Meta-level dashboard (what needs attention)
 │   ├── TECHNIQUES.md            # Pattern catalog
 │   ├── EVALUATION_LOG.md        # Technique evaluation tracking
-│   └── PROJECTS.md              # Project registry
+│   ├── PROJECTS.md              # Project registry
+│   ├── SKILL_INDEX.md           # Skill inventory + evaluation framework
+│   ├── TRACKING_SYSTEM_DESIGN.md # Lists, zones, body tags
+│   ├── SIGNAL_CAPTURE_PATTERN.md # Signal intake pipeline
+│   ├── SILENT_FAILURE_SAFEGUARDS.md # Failure classes that report success
+│   ├── LEARNING_SYSTEM_DESIGN.md # Synthesizer / Advisor / Reflector / Challenger
+│   ├── PROACTIVITY_DESIGN.md    # Push-based, always-on patterns
+│   ├── SYSTEM_ROADMAP.md        # Backlog + phases
+│   ├── TECHNICAL_GOTCHAS.md     # Hooks, CLIs, macOS, MCP dev
+│   └── guides/
+│       ├── simulated-expert-panels.md
+│       └── synthetic-testing.md
 ├── _example-project/            # Empty scaffolding (start here)
 │   ├── CLAUDE.md                # Project-level context
 │   └── CURRENT_STATE.md         # Project-level state (optional)
 ├── _example-project-day7/       # Populated example (see what "lived-in" looks like)
 │   ├── CLAUDE.md                # With real context, mistakes, routing
 │   └── CURRENT_STATE.md         # With deadlines, working memory, history
+├── templates/
+│   ├── COMPANY_LLM_HANDOFF.md
+│   └── TRIAL_LOG.md
 └── .claude/
-    └── commands/
-        ├── consistency-check.md # Registry verification command
-        └── end.md               # Session-end persistence (gather-process-emit)
+    └── commands/                # 12 skills
+        ├── start.md             # Session init (gather → process → emit)
+        ├── end.md               # Session-end persistence
+        ├── check.md             # System health check
+        ├── capture.md           # Signal triage + routing
+        ├── route.md             # Execute staged routing proposals
+        ├── revisit.md           # Position review, spaced repetition
+        ├── challenge.md         # Persona-based decision challenge
+        ├── meeting-notes.md     # Post-meeting extraction
+        ├── new-project.md       # Create a new vault
+        ├── new-technique.md     # Document a technique
+        ├── sync-review.md       # Process cross-machine sync packets
+        └── consistency-check.md # Superseded by /check; kept for reference
 ```
 
 **Two examples included:**

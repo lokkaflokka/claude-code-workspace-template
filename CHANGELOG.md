@@ -2,6 +2,36 @@
 
 All notable changes to this template.
 
+## [0.9.0] - 2026-08-02
+
+Principles release. The source system this template extracts from had grown from 8 core principles to 10, and the two additions are the ones its own records rank highest by recurrence. This release closes that gap and adopts the source system's compression discipline for the always-loaded principle blocks.
+
+### Added
+
+- **Principle 9: Entity-of-Record Discipline.** Exactly one system holds the truth for each tracked entity; everything else references it. Covers the "before creating a second record, ask whether the first should move" gate, credential rotation as atomic with its fan-out, the owned-fix guard (new observations of a known failure class route to the owning record rather than spawning competing artifacts), and the rule that documentation describing an obligation is not the same as the obligation being tracked.
+- **Principle 10: Source Before Action.** Read the underlying source before any plan, breakdown, sizing, recommendation, or state-mutating action about a tracked item. Promoted out of Principle 3 to its own number because it is the highest-recurrence anti-pattern the source system has recorded, and a rule that keeps being violated while nested inside a broader rule needs its own name and its own violation count. Includes the mechanical-not-behavioral enforcement tier and the gate-surface enumeration rule (write both lists: every surface the RULE names, every surface the GATE observes).
+- **`_shared/PRINCIPLES_REFERENCE.md`:** full enforcement sections for Principles 9 and 10, matching the existing per-principle format (principle, enforcement, anti-pattern, verification, violations prevented).
+
+### Changed
+
+- **`_shared/CLAUDE.md` restructured to operative-rules-only** (`_context.version` 2.1 to 2.2). Each principle block now states the operative rule in the imperative and points at `PRINCIPLES_REFERENCE.md` for reasoning and history. A new House style note states the compression test explicitly: this file loads into every session, so prose that has stopped changing behavior costs tokens on every turn. Compress on that test, not on length.
+- **Principle 5 now splits WRITE from RENDER.** Deciding who may read a body on which surface is a separate question from where the content may be persisted, and each fence gets priced on its own evidence. Added because a policy sentence of the form "never A, B, C, or D" is usually more than one rule, and the weaker half silently inherits the stronger half's absoluteness.
+- **Principle 7 gains body-sufficiency.** An item must carry its execution payload inside whatever character budget the reading surface actually renders. A body that is sufficient in principle but truncated on a phone is not sufficient.
+- **Principle 2 gains recurrence escalation.** The same gate-class failing twice inside 48 hours requires a mechanical fix at a named surface; a second occurrence never closes as a discipline insight.
+- **`README.md` structure tree corrected.** It listed 2 of the 12 shipped skills and 5 of the 15 shipped `_shared/` files. Now accurate, with `consistency-check.md` marked as superseded by `/check` rather than presented as a primary command.
+
+### Fixed
+
+- **Backfilled the missing `[0.8.0]` CHANGELOG entry.** v0.8.0 was tagged 2026-05-16 with a full annotation, but the CHANGELOG stopped at 0.7.0, so the public release record skipped a version.
+
+## [0.8.0] - 2026-05-16
+
+`/end` Phase 5, the post-close addendum. Single `feat` commit since v0.7.0 (`b388328`). Backfilled 2026-08-02 from the annotated tag; this entry was missing from the original release.
+
+### Added
+
+- **`/end` Phase 5: Post-`/end` addendum.** Handles work that continues after session close. Captures the addendum pattern (chained sessions, late-arriving completions, mid-deferred work) into the durable session record without requiring a full second `/end` pass.
+
 ## [0.7.0] - 2026-05-10
 
 Major release. Substantially expanded skill suite, six new design docs, and a refreshed `_shared/CLAUDE.md` that lazy-loads enforcement detail and gotchas to keep the always-loaded CLAUDE.md hierarchy under reinjection thresholds.

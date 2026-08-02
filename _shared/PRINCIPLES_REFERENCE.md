@@ -1,6 +1,6 @@
 # Principles Reference
 
-Full enforcement detail for the 8 Core Principles. Concise forms live in `_shared/CLAUDE.md` (always loaded). This file is loaded by `/check`, `/end`, and during violation investigation.
+Full enforcement detail for the 10 Core Principles. Concise forms live in `_shared/CLAUDE.md` (always loaded). This file is loaded by `/check`, `/end`, and during violation investigation.
 
 **The meta-rule:** Documentation without enforcement is aspirational. Each principle below has a verification step.
 
@@ -252,6 +252,52 @@ Test: Can future-you act without re-researching?
 - Content analyzed but never routed
 - Unnecessary confirmation gates on obvious routing decisions
 - Dropped items due to fetch failures (URL still has value even without a summary)
+
+---
+
+## Principle 9: Entity-of-Record Discipline
+
+**Principle:** For each tracked entity (an account, a person, a decision, a credential, a recurring obligation), exactly one system holds the truth. Every other mention references it and never duplicates it.
+
+**Enforcement:**
+1. **Before creating a second record, ask whether the first should move instead.** Duplication is the default failure mode because creating is cheap and migrating is not. The question is not "where does this belong" but "does a home already exist."
+2. **Credential rotation is atomic with its fan-out.** "Find and replace every referencing site" is a step inside the rotation, never a follow-up task. A rotated secret with a stale reference somewhere is a broken system that reports success.
+3. **Owned-fix guard.** When a failure class already has an owned fix in flight, new observations of that class route to the owning record. They never become a new record, a new rule, or a second attempt at the same fix. Without this, one problem grows N tracking artifacts and the fix never ships because attention splits.
+4. **Documentation is not a record.** A paragraph describing an obligation reads exactly like coverage to a reader looking for coverage. Resolve "tracked elsewhere" claims to a dated, actionable item before reporting them as covered.
+
+**The anti-pattern:** two files, both describing the same account, diverging slowly, with no marker saying which one is authoritative. Six months later both are wrong in different directions and neither reader can tell.
+
+**Verification (`/check`):** entity fragmentation scan. Grep high-value entity names across vaults; more than one file holding mutable state for the same entity is a finding, not a style preference.
+
+**Violations this prevents:**
+- Duplicate records diverging silently
+- Rotated credentials with stale references left behind
+- One failure class spawning several competing tracking artifacts
+- Prose about an obligation being mistaken for the obligation being tracked
+
+---
+
+## Principle 10: Source Before Action
+
+**Principle:** Before producing any plan, breakdown, sizing, recommendation, or state-mutating action about a tracked item, read the underlying source content first. This covers reminder bodies, active specs, and any referenced vault file.
+
+**Why it is its own principle:** it is a special case of Principle 3, and it was folded into Principle 3 for a long time. It earned separate status because it is the highest-recurrence anti-pattern this system has recorded. A rule that keeps being violated while nested inside a broader rule needs its own name, its own enforcement surface, and its own violation count.
+
+**Enforcement:**
+1. **Title-only execution is the failure.** A reminder title is an index entry, not a specification. The body holds the blocker, the decision already made, the phone number, the constraint that changes the answer. Acting on the title produces plans that are confidently wrong in ways the user can see immediately and you cannot.
+2. **Mechanical, not behavioral.** Behavioral re-enforcement has failed repeatedly here. Enforce at every surface that can act on a title alone: a hook that gates action on tracked items until the source is read, a skill step that loads bodies before planning, a gather that ships bodies rather than titles.
+3. **Name every surface the rule covers, in the gate's own docstring.** A gate's trigger surface tends to inherit the shape of the single failure that motivated it, not the shape of the rule it enforces, and the rule then reads as closed while most of its surface is uncovered. Write two lists: every surface the RULE names, and every surface the GATE observes.
+4. **Where the uncovered surface has no cheap gate, say so and stop.** A gate that only flags after the fact is instrumentation. Filing one improves the counter without changing what happens.
+
+**The anti-pattern:** the user names a tracked item, you recognize the title, and you produce a plan from what the title implies. The body said the work was blocked three weeks ago.
+
+**Verification (`/start`, `/end`):** when the user selects a tracked item for execution, load its full body before any plan or mutation. An unresolved blocker in the body surfaces first and refuses the action until acknowledged.
+
+**Violations this prevents:**
+- Plans built on titles that contradict their own bodies
+- Re-solving problems already marked resolved in the body
+- Acting on items whose bodies record an unmet blocker
+- Gates that cover the one remembered failure and miss the rule
 
 ---
 
